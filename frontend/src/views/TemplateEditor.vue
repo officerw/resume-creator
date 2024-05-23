@@ -1,5 +1,5 @@
 <script setup lang="ts">
-
+import PDFViewer from "../components/PDFViewer.vue"
 </script>
 
 <template>
@@ -9,7 +9,7 @@
         </div>
 
         <div id="right-panel">
-
+            <PDFViewer/>
         </div>
     </div>
 </template>
@@ -17,7 +17,7 @@
 <style>
     .main {
         width: 100%;
-        padding: 0 10% 0 10%;
+        padding: 0 5% 0 5%;
         height: 20px;
         display: block;
     }
