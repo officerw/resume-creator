@@ -1,0 +1,29 @@
+{
+    "name": "",
+    "contact-info": ["", "", ""],
+    "sections": [
+        {
+            "section-name": "",
+            "section-type": "lists",
+            "content": [
+                {
+                    "list-title": "",
+                    "list-content": ""
+                }
+            ]
+        },
+        {
+            "section-name": "",
+            "section-type": "experiences",
+            "content": [
+                {
+                    "experience-title": "",
+                    "location": "",
+                    "organization": "",
+                    "tenure": "",
+                    "content": ["", "", ""]
+                }
+            ]
+        }
+    ]
+}
