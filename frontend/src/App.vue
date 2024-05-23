@@ -22,8 +22,10 @@ import { ref } from 'vue'
 
     <div class="navbar">
       <nav>
-        <RouterLink to="/"><h3>Home</h3></RouterLink>
-        <RouterLink to="/editor"><h3>Resume Editor</h3></RouterLink>
+        <ul>
+          <li class="navbar-item"><RouterLink to="/"><h3>Home</h3></RouterLink></li>
+          <li class="navbar-item"><RouterLink to="/editor"><h3>Resume Editor</h3></RouterLink></li>
+        </ul>
       </nav>
     </div>
   </header>
@@ -42,17 +44,19 @@ import { ref } from 'vue'
 
 <style scoped>
   header {
-    height: 6rem;
+    height: max-content;
     width: 100%;
     padding: 0 10% 0 10%;
     align-items: center;
     display: flex;
     background-color: #0461cf;
+    justify-content: space-evenly;
   }
 
   header h1 {
     color: white;
     padding: 0 2rem 0 2rem;
+    vertical-align: middle;
   }
 
   nav {
@@ -61,15 +65,44 @@ import { ref } from 'vue'
   }
 
   .navbar {
-    height: 100%;
+    height: 6rem;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    width: max-content;
   }
 
-  nav a {
+  .navbar ul {
+    list-style-type: none;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    display: flex;
+  }
+
+  ul > li {
+    display: inline-block;
+    height: 100%;
+    margin: 0 2rem;
+  }
+
+  .navbar-item li {
+    padding: 0 2rem;
+  }
+
+  li a {
     text-decoration: none;
     color: #00bf7d;
-    padding: 0 2rem 0 2rem;
     font-size: large;
     height: 100%;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  li a:hover {
+    background-color: rgba(0, 191, 125, 0.25);
   }
 
   footer {
