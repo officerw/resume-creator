@@ -110,25 +110,43 @@ def main():
 
     sections_info = ""
     for section in data.sections:
+        # For each section, add a section header
         sections_info += "\\sectionheader{" + section.section_name + "}\n\n"
 
         if section.is_experiences:
             for experience in section.content:
+                # Add experience header
                 sections_info += "\\experienceheader{" + experience.experience_title + "}{" + experience.location + "}{" + experience.organization + "}{" + experience.tenure + "}\n\n"
 
-            sections_info += "\\begin{itemize}\n"
-            sections_info += "\\setlength\\itemsep{0pt}\n"
+                # Add a list for the experience descriptions
+                sections_info += "\\begin{itemize}\n"
+                sections_info += "\\setlength\\itemsep{0pt}\n"
 
-            for item in section.content:
+                # Add experience descriptions
+                for item in experience.content:
+                    sections_info += "\\item " + item + "\n"
 
+                # End list
+                sections_info += "\\end{itemize}\n\n"
         else:
-            sections_info += 
+            for list in section.content:
+                # Add list title and list content
+                sections_info += "\\skills{" + list.list_title + "}{" + list.list_content + "}\n\n"
 
-        print(s.section_name)
-    #print((Section)(data.sections[0]).content)
+    file = open("./tex_templates/template1.tex", "r")
+    filestr = file.read()
 
-    #pdfl = PDFLaTeX.from_texfile("my_file.tex")
-    #pdf, log, completed_process = pdfl.create_pdf(keep_pdf_file = True, keep_log_file = True)
+    filestr = filestr.replace("NAME", data.name)
+    filestr = filestr.replace("ADDRESS", data.address)
+
+    contact_info = " $\\bullet$ ".join(data.contact_info)
+
+    filestr = filestr.replace("CONTACT_INFO", contact_info)
+    filestr = filestr.replace("SECTIONS", sections_info)
+
+    pdfl = PDFLaTeX.from_binarystring(filestr, "my_file")
+    pdf, log, cp = pdfl.create_pdf()
+
 
 if __name__ == "__main__":
     main()
