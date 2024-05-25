@@ -1,4 +1,5 @@
 from pdflatex import PDFLaTeX
+import tempfile
 import json
 
 # We create a Resume object that consists of a name,
@@ -133,19 +134,28 @@ def main():
                 # Add list title and list content
                 sections_info += "\\skills{" + list.list_title + "}{" + list.list_content + "}\n\n"
 
+    # Read the LaTeX template
     file = open("./tex_templates/template1.tex", "r")
     filestr = file.read()
 
+    # Replace name and address placeholders
     filestr = filestr.replace("NAME", data.name)
     filestr = filestr.replace("ADDRESS", data.address)
-
+    
+    # Add bullet points between contact information values
     contact_info = " $\\bullet$ ".join(data.contact_info)
-
+    
+    # Replace contact information placeholder with contact information
     filestr = filestr.replace("CONTACT_INFO", contact_info)
-    filestr = filestr.replace("SECTIONS", sections_info)
+    # Replace sections with actual sections specified by the user
+    filestr = filestr.replace("SECTIONS", sections_info)  
 
-    pdfl = PDFLaTeX.from_binarystring(filestr, "my_file")
-    pdf, log, cp = pdfl.create_pdf()
+    # Create a temporary .tex file to add .tex string
+    print(filestr)
+
+    #pdfl = PDFLaTeX.from_binarystring(filestr, "my_file")
+    #pdf, log, cp = pdfl.create_pdf()
+
 
 
 if __name__ == "__main__":
