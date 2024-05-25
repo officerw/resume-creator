@@ -1,6 +1,8 @@
 from pdflatex import PDFLaTeX
-import tempfile
+import os
+import time
 import json
+import subprocess
 
 # We create a Resume object that consists of a name,
 # list of contact info, and a list of sections.
@@ -107,6 +109,7 @@ class Experience:
 def main():
     file = open("resume-info.json")
 
+    # Load JSON information into Resume object to be parsed
     data = Resume(json.load(file))
 
     sections_info = ""
@@ -114,6 +117,8 @@ def main():
         # For each section, add a section header
         sections_info += "\\sectionheader{" + section.section_name + "}\n\n"
 
+        # If the section contains experiences, parse the experience information
+        # Otherwise, parse the list information
         if section.is_experiences:
             for experience in section.content:
                 # Add experience header
@@ -132,7 +137,7 @@ def main():
         else:
             for list in section.content:
                 # Add list title and list content
-                sections_info += "\\skills{" + list.list_title + "}{" + list.list_content + "}\n\n"
+                sections_info += "\\listsection{" + list.list_title + "}{" + list.list_content + "}\n\n"
 
     # Read the LaTeX template
     file = open("./tex_templates/template1.tex", "r")
@@ -150,12 +155,26 @@ def main():
     # Replace sections with actual sections specified by the user
     filestr = filestr.replace("SECTIONS", sections_info)  
 
-    # Create a temporary .tex file to add .tex string
-    print(filestr)
+    # Create a temporary .tex file to add .tex string with a name determined
+    # by the time of creation. Write to this file.
+    fileCreationTime = str(time.time_ns())
+    tempTexFilePath = "./" + fileCreationTime + ".tex"
+    tempTexFile = open(tempTexFilePath, "a")
+    tempTexFile.write(filestr)
+    tempTexFile.close()
 
-    #pdfl = PDFLaTeX.from_binarystring(filestr, "my_file")
-    #pdf, log, cp = pdfl.create_pdf()
+    # Create PDF based on .tex file
+    result = subprocess.run(["pdflatex", tempTexFilePath], capture_output = True, text = True)
 
+    if result.stderr != "":
+        print("Error generating PDF from temporary .tex file")
+
+    # Delete temporary .tex file
+    os.remove(tempTexFilePath)
+
+    # Delete .log and .aux files resulting from PDF creation
+    os.remove(fileCreationTime + ".aux")
+    os.remove(fileCreationTime + ".log")
 
 
 if __name__ == "__main__":
