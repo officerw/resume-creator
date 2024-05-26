@@ -6,7 +6,7 @@ import ResumeBuilder from "../components/ResumeBuilder.vue"
 <template>
     <div class="main">
         <div id="left-panel">
-            <ResumeBuilder />
+            <ResumeBuilder/>
         </div>
 
         <div id="right-panel">
@@ -19,21 +19,21 @@ import ResumeBuilder from "../components/ResumeBuilder.vue"
     .main {
         width: 100%;
         padding: 0 5% 0 5%;
-        height: 20px;
+        height: max-content;
         display: block;
     }
 
     #left-panel {
         display: inline-block;
         width: 50%;
-        height: 20px;
+        height: 100%;
         background-color: green;
     }
 
     #right-panel {
         display: inline-block;
         width: 50%;
-        height: 20px;
+        height: 100%;
         background-color: blue;
     }
 
