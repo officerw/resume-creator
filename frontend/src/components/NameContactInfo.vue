@@ -1,8 +1,8 @@
 <script setup lang="ts">
-    import { ref } from "vue"
+    import { ref, defineEmits, watch } from "vue"
 
     // Define emit which will send name/contact info to other components
-    const emit = defineEmits(["updateInfo"])
+    const emit = defineEmits(["updateName", "updateContacts"])
 
     // Give each contact information field an index
     let index = 0
@@ -26,12 +26,24 @@
         index -= 1
     }
 
+    // Whenever name changes, emit updated value to parent component
+    watch(name, (newName) => {
+        emit("updateName", newName)
+    })
+
+    // Whenever contact information changes, emit updated value to parent component
+    watch(contacts.value, (newContacts) => {
+        emit("updateContacts", newContacts)
+    })
+
 </script>
 
 <template>
     <div class="name-contact-info-container">
         <h4>Name/Title of Resume:</h4>
         <textarea id="name" v-model="name" rows="1" name="Name" placeholder="Name/Title Goes Here" maxlength="50"></textarea>
+
+        <!-- Display contact information textarea fields for user to populate -->
         <h4>Contact Information:</h4>
         <ul>
             <li v-for="contact in contacts" :key="contact.id">
@@ -39,6 +51,7 @@
             </li>
         </ul>
 
+        <!-- The following section allows the user to add and remove contact information fields -->
         <div class="contact-list-buttons">
             <button id="add-button" v-if="index<6" @click="addContactInfo()"><img src="/static/plus.png" alt="+"/></button>
             <button id="remove-button" v-if="index>1" @click="removeContactInfo()"><img src="/static/minus.png" alt="-"/></button>

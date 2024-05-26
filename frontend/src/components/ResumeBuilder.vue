@@ -8,13 +8,17 @@
 
 <script setup lang="ts">
     import NameContactInfo from "../components/NameContactInfo.vue"
+    import { ref } from "vue"
 
+    const resumeInfo = ref({
+        
+    })
 
 </script>
 
 <template>
     <div class="resume-builder">
-        <NameContactInfo/>
+        <NameContactInfo @update-name="" />
     </div>
 </template>
 
