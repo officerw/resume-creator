@@ -4,34 +4,37 @@ import ResumeBuilder from "../components/ResumeBuilder.vue"
 </script>
 
 <template>
-    <div class="main">
-        <div id="left-panel">
+    <div class="editor">
+        <div id="left-editor">
             <ResumeBuilder/>
         </div>
 
-        <div id="right-panel">
+        <div id="right-editor">
             <PDFViewer/>
         </div>
     </div>
 </template>
 
 <style>
-    .main {
+    .editor {
         width: 100%;
         padding: 0 5% 0 5%;
-        height: max-content;
+        height: 300px;
         display: block;
     }
 
-    #left-panel {
-        display: inline-block;
+    #left-editor {
+        display: block;
+        float: left;
+        padding: 0.5rem 1rem;
         width: 50%;
         height: 100%;
         background-color: green;
     }
 
-    #right-panel {
-        display: inline-block;
+    #right-editor {
+        display: block;
+        float: right;
         width: 50%;
         height: 100%;
         background-color: blue;

@@ -1,15 +1,15 @@
 <script setup lang="ts">
-
+    import NameContactInfo from "../components/NameContactInfo.vue"
 </script>
 
 <template>
-    <div class="main">
-        lmao
+    <div class="resume-builder">
+        <NameContactInfo/>
     </div>
 </template>
 
 <style>
-    .main {
+    .resume-builder {
         width: 100%;
         height: 100%;
     }

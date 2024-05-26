@@ -3,12 +3,12 @@
 </script>
 
 <template>
-    <div class="main">
+    <div class="pdf">
     </div>
 </template>
 
 <style>
-    .main {
+    .pdf {
         width: 100%;
         height: 100%;
     }
