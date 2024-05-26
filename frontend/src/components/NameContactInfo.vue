@@ -1,14 +1,16 @@
 <script setup lang="ts">
     import { ref } from "vue"
 
+    // Define emit which will send name/contact info to other components
+    const emit = defineEmits(["updateInfo"])
+
     // Give each contact information field an index
     let index = 0
-
+    // Make name and contact information reactive
     const name = ref("")
     const contacts = ref([
         { id: ++index, info: "" }
     ])
-
 
     // Add another field of contact information
     function addContactInfo() {
@@ -22,13 +24,6 @@
     function removeContactInfo() {
         contacts.value.pop()
         index -= 1
-    }
-
-    // Print out contact info
-    function print() {
-        for (let i = 0; i < contacts.value.length; i++) {
-            console.log(contacts.value[i])
-        }
     }
 
 </script>
@@ -45,11 +40,10 @@
         </ul>
 
         <div class="contact-list-buttons">
-            <button id="add-button" v-if="index<6" @click="addContactInfo()">+</button>
-            <button id="remove-button" v-if="index>1" @click="removeContactInfo()">-</button>
+            <button id="add-button" v-if="index<6" @click="addContactInfo()"><img src="/static/plus.png" alt="+"/></button>
+            <button id="remove-button" v-if="index>1" @click="removeContactInfo()"><img src="/static/minus.png" alt="-"/></button>
         </div>
 
-        <button @onclick="print()">plos</button>
     </div>
 </template>
 
@@ -70,6 +64,11 @@
         resize:none;
     }
 
+    img {
+        width: 1rem;
+        height: 1rem;
+    }
+
     ul {
         list-style: none;
         padding: 0;
@@ -88,12 +87,14 @@
         border-radius: 5px;
     }
 
+    
     #add-button {
         background-color: lightgreen;
     }
 
     #remove-button {
-        background-color: lightcoral
+        background-color: lightcoral;
     }
+    
 
 </style>

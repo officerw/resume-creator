@@ -1,3 +1,9 @@
+<!--
+  TemplateEditor
+
+  This page contains the resume builder component and the PDF viewer component.
+-->
+
 <script setup lang="ts">
 import PDFViewer from "../components/PDFViewer.vue"
 import ResumeBuilder from "../components/ResumeBuilder.vue"
@@ -19,7 +25,7 @@ import ResumeBuilder from "../components/ResumeBuilder.vue"
     .editor {
         width: 100%;
         padding: 0 5% 0 5%;
-        height: 300px;
+        height: fit-content;
         display: block;
     }
 
@@ -28,15 +34,15 @@ import ResumeBuilder from "../components/ResumeBuilder.vue"
         float: left;
         padding: 0.5rem 1rem;
         width: 50%;
-        height: 100%;
-        background-color: green;
+        height: fit-content;
+        background-color: #9dbdd9;
     }
 
     #right-editor {
         display: block;
         float: right;
         width: 50%;
-        height: 100%;
+        height: fit-content;
         background-color: blue;
     }
 
