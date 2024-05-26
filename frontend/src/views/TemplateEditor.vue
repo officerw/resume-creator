@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import PDFViewer from "../components/PDFViewer.vue"
+import ResumeBuilder from "../components/ResumeBuilder.vue"
 </script>
 
 <template>
     <div class="main">
         <div id="left-panel">
-
+            <ResumeBuilder />
         </div>
 
         <div id="right-panel">
