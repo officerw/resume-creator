@@ -1,7 +1,6 @@
 {
     "name": "William Officer",
-    "address": "a",
-    "contact-info": ["officerw@grinnell.edu", "github.com/officerw", "p"],
+    "contact-info": ["officerw@grinnell.edu", "github.com/officerw", "p", "a"],
     "sections": [
         {
             "section-name": "Education",
