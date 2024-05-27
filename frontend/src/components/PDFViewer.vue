@@ -3,13 +3,12 @@
 </script>
 
 <template>
-    <div class="main">
-        <embed src="../../../backend/pdf/default.pdf" width="200px" height="500px"/>
+    <div class="pdf">
     </div>
 </template>
 
 <style>
-    .main {
+    .pdf {
         width: 100%;
         height: 100%;
     }
