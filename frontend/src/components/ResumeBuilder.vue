@@ -8,17 +8,50 @@
 
 <script setup lang="ts">
     import NameContactInfo from "../components/NameContactInfo.vue"
+    import ResumeSections from "../components/ResumeSections.vue"
     import { ref } from "vue"
 
+    // Store resume information
     const resumeInfo = ref({
-        
+        name: "",
+        contact_info: [""],
+        sections: []
     })
+
+    // Define interface for contact information
+    // Refer to NameContactInfo.vue for structure of
+    // Contact object
+    interface Contact {
+        id: Number
+        info: String
+    }
+
+    // Update contacts based on provided information
+    function updateContacts(contacts: Contact[]) {
+        let list = []
+        for (let i = 0; i < contacts.length; i++) {
+            list.push(contacts[i].info.valueOf())
+        }
+
+        resumeInfo.value.contact_info = list
+    }
+
+    // Update name
+    function updateName(name: string) {
+        resumeInfo.value.name = name
+        console.log(resumeInfo.value)
+    }
 
 </script>
 
 <template>
     <div class="resume-builder">
-        <NameContactInfo @update-name="" />
+        <NameContactInfo 
+            @update-name="(name) => updateName(name)" 
+            @update-contacts="(contacts) => updateContacts(contacts)"
+            />
+
+        <ResumeSections/>
     </div>
 </template>
 

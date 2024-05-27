@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref, defineEmits, watch } from "vue"
+    import { ref, watch } from "vue"
 
     // Define emit which will send name/contact info to other components
     const emit = defineEmits(["updateName", "updateContacts"])
@@ -17,7 +17,6 @@
         contacts.value.push(
             { id: ++index, info: "" }
         )
-        console.log(contacts.value[contacts.value.length - 1].id)
     }
 
     // Remove field of contact information
