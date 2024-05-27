@@ -15,7 +15,7 @@
 
 <template>
     <div class="resume-sections">
-        
+        <h4>Sections</h4>
     </div>
 </template>
 
