@@ -40,7 +40,7 @@
         </div>
 
         <!-- The following section allows the user to add different kinds of sections to the resume builder -->
-        <div class="contact-list-buttons">
+        <div class="section-list-buttons">
             <button id="add-experience" @click="addSection('experience')">Add Experience Section</button>
             <button id="add-list" @click="addSection('list')">Add List Section</button>
         </div>
@@ -48,5 +48,15 @@
 </template>
 
 <style>
+    .section-list-buttons {
+        display: flex;
+    }
 
+    button {
+        display: flex;
+        flex-direction:row;
+        justify-content: center;
+        flex: 1;
+        border-radius: 5px;
+    }
 </style>
