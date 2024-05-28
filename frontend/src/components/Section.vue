@@ -7,7 +7,7 @@
     const sectionTitle = ref("")
 
     // Delete this section when requested
-    const emit = defineEmits(["deleteSection"])
+    const emit = defineEmits(["deleteSection", "updateSection", "updateSectionExperiences"])
 
     // Accept whether this section is a list type or experience type
     const props = defineProps({
