@@ -39,7 +39,6 @@
     // Update name
     function updateName(name: string) {
         resumeInfo.value.name = name
-        console.log(resumeInfo.value)
     }
 
 </script>
