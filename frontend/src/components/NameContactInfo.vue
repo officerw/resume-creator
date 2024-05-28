@@ -52,8 +52,8 @@
 
         <!-- The following section allows the user to add and remove contact information fields -->
         <div class="contact-list-buttons">
-            <button id="add-button" v-if="index<6" @click="addContactInfo()"><img class="contact-info-button-img" src="/static/plus.png" alt="+"/></button>
-            <button id="remove-button" v-if="index>1" @click="removeContactInfo()"><img class="contact-info-button-img" src="/static/minus.png" alt="-"/></button>
+            <button id="add-button-contact" v-if="index<6" @click="addContactInfo()"><img class="contact-info-button-img" src="/static/plus.png" alt="+"/></button>
+            <button id="remove-button-contact" v-if="index>1" @click="removeContactInfo()"><img class="contact-info-button-img" src="/static/minus.png" alt="-"/></button>
         </div>
 
     </div>
@@ -100,11 +100,11 @@
     }
 
     
-    #add-button {
+    #add-button-contact {
         background-color: lightgreen;
     }
 
-    #remove-button {
+    #remove-button-contact {
         background-color: lightcoral;
     }
     

@@ -21,13 +21,33 @@
         }
     })
 
+    // Store a list of experiences
+    let index = 0
     const experiences = ref([
-        { id: 1, title: "", location: "", organization: "", tenure: "", content: []}
+        { id: ++index, title: "", location: "", organization: "", tenure: "", content: []}
     ])
 
     // Tell parent component to delete this section
     function deleteSection(idToRemove: number) {
         emit("deleteSection", idToRemove)
+    }
+
+    function addExperience() {
+        experiences.value.push({
+            id: ++index, title: "", location: "", organization: "", tenure: "", content: []
+        })
+    }
+
+    function removeExperience() {
+        experiences.value.pop()
+        index -= 1
+    }
+
+    type Experience = {
+        title: string
+        location: string
+        organization: string
+        tenure: string
     }
 
 </script>
@@ -54,9 +74,24 @@
         <div v-else class="experience-section">
             <draggable v-model="experiences" item-key="id">
                 <template #item="{element}">
-                    <Experience/>
+                    <Experience @update-experience="(experience: Experience) => {
+                        element.title = experience.title
+                        element.location = experience.location
+                        element.organization = experience.organization
+                        element.tenure = experience.tenure
+                    }"
+                    @update-experience-details="(details: String[]) => {
+                        element.content = details
+                        console.log(experiences)
+                    }" />
                 </template>
             </draggable>
+
+            <!-- Buttons to add/remove experiences to this section -->
+            <div class="experiences-buttons">
+                <button v-if="experiences.length < 42" id="add-experience" @click="addExperience()">Add Experience</button>
+                <button v-if="experiences.length > 1" id="remove-experience" @click="removeExperience()">Remove Experience</button>
+            </div>
         </div>
     </div>
 </template>
@@ -102,6 +137,20 @@
     #delete-section {
         background-color: lightcoral;
         float: right;
+        margin: 5px;
     }
+
+    .experiences-buttons {
+        display: flex;
+    }
+
+    .experiences-buttons button {
+        display: flex;
+        flex-direction:row;
+        justify-content: center;
+        flex: 1;
+        border-radius: 5px;
+    }
+
     
 </style>
