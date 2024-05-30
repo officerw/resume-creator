@@ -7,7 +7,7 @@
     const sectionTitle = ref("")
 
     // Delete this section when requested
-    const emit = defineEmits(["deleteSection", "updateSection", "updateSectionExperiences"])
+    const emit = defineEmits(["deleteSection", "updateTitle", "updateSectionExperiences"])
 
     // Accept whether this section is a list type or experience type
     const props = defineProps({
@@ -49,6 +49,11 @@
         organization: string
         tenure: string
     }
+
+    // Whenever the title changes, emit the value to the parent component
+    watch(sectionTitle, (newTitle) => {
+        emit("updateTitle", newTitle)
+    })
 
     // Whenever experience information changes provided by the user, emit the value to parent component
     watch(experiences.value, (newExperiences) => {
