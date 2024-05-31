@@ -3,11 +3,12 @@
     import { DeprecationTypes, ref, watch } from "vue"
     import draggable from "vuedraggable"
     import Experience from "./Experience.vue"
+    import List from "./List.vue"
 
     const sectionTitle = ref("")
 
     // Delete this section when requested
-    const emit = defineEmits(["deleteSection", "updateTitle", "updateSectionExperiences"])
+    const emit = defineEmits(["deleteSection", "updateTitle", "updateSectionExperiences", "updateLists"])
 
     // Accept whether this section is a list type or experience type
     const props = defineProps({
@@ -22,9 +23,15 @@
     })
 
     // Store a list of experiences
-    let index = 0
+    let indexExp = 0
     const experiences = ref([
-        { id: ++index, title: "", location: "", organization: "", tenure: "", content: [""]}
+        { id: ++indexExp, title: "", location: "", organization: "", tenure: "", content: [""]}
+    ])
+
+    // Store list of lists
+    let indexList = 0
+    const lists = ref([
+        { id: ++indexList, title: "", content: ""}
     ])
 
     // Tell parent component to delete this section
@@ -34,13 +41,22 @@
 
     function addExperience() {
         experiences.value.push({
-            id: ++index, title: "", location: "", organization: "", tenure: "", content: [""]
+            id: ++indexExp, title: "", location: "", organization: "", tenure: "", content: [""]
         })
     }
 
     function removeExperience() {
         experiences.value.pop()
-        index -= 1
+        indexExp -= 1
+    }
+
+    function addList() {
+        lists.value.push({ id: ++indexList, title: "", content: ""})
+    }
+
+    function removeList() {
+        lists.value.pop()
+        indexList -= 1
     }
 
     type Experience = {
@@ -50,6 +66,11 @@
         tenure: string
     }
 
+    type List = {
+        list_title: string
+        list_content: string
+    }
+
     // Whenever the title changes, emit the value to the parent component
     watch(sectionTitle, (newTitle) => {
         emit("updateTitle", newTitle)
@@ -57,9 +78,17 @@
 
     // Whenever experience information changes provided by the user, emit the value to parent component
     watch(experiences.value, (newExperiences) => {
-        console.log(newExperiences)
-
         emit("updateSectionExperiences", newExperiences)
+    })
+
+    // Whenever the lists change, emit the value to the parent component
+    watch(lists.value, (newLists) => {
+        var lists: List[] = []
+        for (let i = 0; i < newLists.length; i++) {
+            lists.push({ list_title: newLists[i].title, list_content: newLists[i].content })
+        }
+
+        emit("updateLists", lists)
     })
 
 </script>
@@ -81,7 +110,16 @@
 
         <!-- Here, we outline the layout of a list type section -->
         <div v-if="sectionType == 'list'" class="list-section">
-            I am a list
+            <div v-for="list in lists">
+                <List @update-list-title="(newTitle) => (list.title = newTitle)" 
+                @update-list-content="(newContent) => (list.content = newContent)" />
+            </div>
+
+            <!-- Buttons to add/remove lists to this section -->
+            <div class="lists-buttons">
+                <button v-if="lists.length < 15" id="add-list" @click="addList()">Add List</button>
+                <button v-if="lists.length > 1" id="remove-list" @click="removeList()">Remove List</button>
+            </div>
         </div> <!-- Here, we outline the layout of a list of experiences type section and update experience details based on user input -->
         <div v-else class="experience-section">
             <draggable :list="experiences" item-key="id">
