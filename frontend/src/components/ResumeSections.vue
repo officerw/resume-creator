@@ -53,7 +53,7 @@ import type { RefSymbol } from "@vue/reactivity";
 
         <!-- List of sections -->
         <div v-if="sections.length > 0" class="sections-list">
-            <draggable v-model="sections" item-key="id">
+            <draggable :list="sections" item-key="id">
                 <template #item="{element}">
                     <Section :id="element.id" :section-type="element.type" 
                         @delete-section="(idToRemove) => removeSection(idToRemove)"

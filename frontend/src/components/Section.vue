@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-    import { ref, watch } from "vue"
+    import { DeprecationTypes, ref, watch } from "vue"
     import draggable from "vuedraggable"
     import Experience from "./Experience.vue"
 
@@ -24,7 +24,7 @@
     // Store a list of experiences
     let index = 0
     const experiences = ref([
-        { id: ++index, title: "", location: "", organization: "", tenure: "", content: []}
+        { id: ++index, title: "", location: "", organization: "", tenure: "", content: [""]}
     ])
 
     // Tell parent component to delete this section
@@ -34,7 +34,7 @@
 
     function addExperience() {
         experiences.value.push({
-            id: ++index, title: "", location: "", organization: "", tenure: "", content: []
+            id: ++index, title: "", location: "", organization: "", tenure: "", content: [""]
         })
     }
 
@@ -43,7 +43,6 @@
         index -= 1
     }
 
-    
     type Experience = {
         title: string
         location: string
@@ -58,6 +57,8 @@
 
     // Whenever experience information changes provided by the user, emit the value to parent component
     watch(experiences.value, (newExperiences) => {
+        console.log(newExperiences)
+
         emit("updateSectionExperiences", newExperiences)
     })
 
@@ -83,7 +84,7 @@
             I am a list
         </div> <!-- Here, we outline the layout of a list of experiences type section and update experience details based on user input -->
         <div v-else class="experience-section">
-            <draggable v-model="experiences" item-key="id">
+            <draggable :list="experiences" item-key="id">
                 <template #item="{element}">
                     <Experience @update-experience="(experience: Experience) => {
                         element.title = experience.title
@@ -91,7 +92,7 @@
                         element.organization = experience.organization
                         element.tenure = experience.tenure
                     }"
-                    @update-experience-details="(details: String[]) => {
+                    @update-experience-details="(details: string[]) => {
                         element.content = details
                     }" />
                 </template>
