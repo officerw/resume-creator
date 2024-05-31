@@ -3,7 +3,6 @@
     import { ref, watch } from "vue"
     import draggable from "vuedraggable"
     import Section from "./Section.vue"
-import type { RefSymbol } from "@vue/reactivity";
 
     type List = {
         list_title: string
@@ -40,10 +39,6 @@ import type { RefSymbol } from "@vue/reactivity";
         // Remove section to be removed by filtering out its id
         sections.value = sections.value.filter((element) => element.id != idToRemove)
     }
-    // debug
-    watch(sections.value, (s) => {
-        console.log(s)
-    })
 
 </script>
 
@@ -53,12 +48,13 @@ import type { RefSymbol } from "@vue/reactivity";
 
         <!-- List of sections -->
         <div v-if="sections.length > 0" class="sections-list">
-            <draggable v-model="sections" item-key="id">
+            <draggable :list="sections" item-key="id">
                 <template #item="{element}">
                     <Section :id="element.id" :section-type="element.type" 
                         @delete-section="(idToRemove) => removeSection(idToRemove)"
                         @update-title="(title) => (element.name = title)"
-                        @update-section-experiences="(experiences) => (element.content = experiences)"></Section>
+                        @update-section-experiences="(experiences) => (element.content = experiences)"
+                        @update-lists="(lists: List[]) => (element.content = lists)"></Section>
                 </template>
             </draggable>
         </div>
