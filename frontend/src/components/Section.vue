@@ -1,13 +1,13 @@
 
 <script setup lang="ts">
-    import { ref } from "vue"
+    import { ref, watch } from "vue"
     import draggable from "vuedraggable"
     import Experience from "./Experience.vue"
 
     const sectionTitle = ref("")
 
     // Delete this section when requested
-    const emit = defineEmits(["deleteSection", "updateSection", "updateSectionExperiences"])
+    const emit = defineEmits(["deleteSection", "updateTitle", "updateSectionExperiences"])
 
     // Accept whether this section is a list type or experience type
     const props = defineProps({
@@ -43,12 +43,23 @@
         index -= 1
     }
 
+    
     type Experience = {
         title: string
         location: string
         organization: string
         tenure: string
     }
+
+    // Whenever the title changes, emit the value to the parent component
+    watch(sectionTitle, (newTitle) => {
+        emit("updateTitle", newTitle)
+    })
+
+    // Whenever experience information changes provided by the user, emit the value to parent component
+    watch(experiences.value, (newExperiences) => {
+        emit("updateSectionExperiences", newExperiences)
+    })
 
 </script>
 
@@ -70,7 +81,7 @@
         <!-- Here, we outline the layout of a list type section -->
         <div v-if="sectionType == 'list'" class="list-section">
             I am a list
-        </div> <!-- Here, we outline the layout of a list of experiences type section -->
+        </div> <!-- Here, we outline the layout of a list of experiences type section and update experience details based on user input -->
         <div v-else class="experience-section">
             <draggable v-model="experiences" item-key="id">
                 <template #item="{element}">
@@ -82,7 +93,6 @@
                     }"
                     @update-experience-details="(details: String[]) => {
                         element.content = details
-                        console.log(experiences)
                     }" />
                 </template>
             </draggable>

@@ -38,7 +38,15 @@
 
     // Whenever experience details update, emit to parent component
     watch(details.value, (newDetails) => {
-        emit("updateExperienceDetails", newDetails)
+        // Convert details from object to list of strings
+        var newDetailsList = []
+        for (let i = 0; i < newDetails.length; i++) {
+            newDetailsList.push(newDetails[i].info)
+        }
+
+        
+
+        emit("updateExperienceDetails", newDetailsList)
     })
 
 </script>
