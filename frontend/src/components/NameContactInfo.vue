@@ -41,7 +41,7 @@
     <div class="name-contact-info-container">
         <h4>Name/Title of Resume:</h4>
         <textarea id="name" v-model="name" rows="1" name="Name" placeholder="Name/Title Goes Here" maxlength="50"></textarea>
-
+ 
         <!-- Display contact information textarea fields for user to populate -->
         <h4>Contact Information:</h4>
         <ul class="contact-info-list">

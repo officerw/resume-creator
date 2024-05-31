@@ -33,6 +33,7 @@
             list.push(contacts[i].info.valueOf())
         }
 
+            
         resumeInfo.value.contact_info = list
     }
 

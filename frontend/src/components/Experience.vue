@@ -44,6 +44,8 @@
             newDetailsList.push(newDetails[i].info)
         }
 
+        
+
         emit("updateExperienceDetails", newDetailsList)
     })
 

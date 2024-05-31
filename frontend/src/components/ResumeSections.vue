@@ -40,7 +40,6 @@ import type { RefSymbol } from "@vue/reactivity";
         // Remove section to be removed by filtering out its id
         sections.value = sections.value.filter((element) => element.id != idToRemove)
     }
-
     // debug
     watch(sections.value, (s) => {
         console.log(s)
