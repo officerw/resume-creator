@@ -58,8 +58,17 @@
     }
 
     // Compile the resume information into a PDF
-    function compilePDF() {
-        console.log(resumeInfo.value)
+    async function compilePDF() {
+        const url = "/api/compilepdf"
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(resumeInfo.value)
+        })
+
+        return 0
     }
 
     watch(resumeInfo.value, (newResume) => {

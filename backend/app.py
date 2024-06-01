@@ -20,3 +20,9 @@ CORS(app)
 @app.route("/<path:path>")
 def index(path):
     return render_template("index.html")
+
+@app.route("/api/compilepdf", methods=["POST"])
+def compilepdf():
+    request_data = request.get_json()
+    print(request_data)
+    return ""
