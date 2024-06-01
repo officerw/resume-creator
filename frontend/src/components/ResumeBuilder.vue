@@ -9,23 +9,44 @@
 <script setup lang="ts">
     import NameContactInfo from "../components/NameContactInfo.vue"
     import ResumeSections from "../components/ResumeSections.vue"
-    import { ref } from "vue"
+    import { ref, watch } from "vue"
+    
+
+    type List = {
+        list_title: string
+        list_content: string
+    }
+
+    type Experience = {
+        experience_title: string
+        location: string
+        organization: string
+        tenure: string
+        content: string[]
+    }
+
+    type Section = {
+        id: number
+        name: string
+        type: string
+        content: (List|Experience)[]
+    }
+
+    // Store list of sections
+    const sections: (Section)[] = []
 
     // Store resume information
     const resumeInfo = ref({
         name: "",
         contact_info: [""],
-        sections: []
+        sections: sections
     })
 
-    // Define interface for contact information
-    // Refer to NameContactInfo.vue for structure of
-    // Contact object
     interface Contact {
         id: Number
         info: String
     }
-
+    
     // Update contacts based on provided information
     function updateContacts(contacts: Contact[]) {
         let list = []
@@ -33,25 +54,32 @@
             list.push(contacts[i].info.valueOf())
         }
 
-            
         resumeInfo.value.contact_info = list
     }
 
-    // Update name
-    function updateName(name: string) {
-        resumeInfo.value.name = name
+    // Compile the resume information into a PDF
+    function compilePDF() {
+        console.log(resumeInfo.value)
     }
+
+    watch(resumeInfo.value, (newResume) => {
+        console.log(newResume)
+    })
 
 </script>
 
 <template>
+    <div class="compile-resume-info">
+        <button id="compile-resume-button" @click="compilePDF()">Compile into PDF</button>
+    </div>
+
     <div class="resume-builder">
         <NameContactInfo 
-            @update-name="(name) => updateName(name)" 
-            @update-contacts="(contacts) => updateContacts(contacts)"
-            />
+            @update-name="(name) => (resumeInfo.name = name)" 
+            @update-contacts="(contacts) => updateContacts(contacts)"/>
 
-        <ResumeSections/>
+        <ResumeSections
+            @update-sections="(sections) => resumeInfo.sections = sections"/>
     </div>
 </template>
 
