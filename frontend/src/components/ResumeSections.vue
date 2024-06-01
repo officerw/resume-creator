@@ -4,6 +4,8 @@
     import draggable from "vuedraggable"
     import Section from "./Section.vue"
 
+    const emit = defineEmits(["updateSections"])
+
     type List = {
         list_title: string
         list_content: string
@@ -17,7 +19,7 @@
         content: string[]
     }
 
-    type SectionInfo = {
+    type Section = {
         id: number
         name: string
         type: string
@@ -26,7 +28,7 @@
 
     // Define index and reactive list of section information
     var index = 0
-    const val: SectionInfo[] = []
+    const val: Section[] = []
     const sections = ref(val)
 
     // Add a section based on the type
@@ -36,9 +38,22 @@
 
     // Remove a section when the user deletes it
     function removeSection(idToRemove: Number) {
-        // Remove section to be removed by filtering out its id
-        sections.value = sections.value.filter((element) => element.id != idToRemove)
+        let updatedSections: (Section)[] = []
+        for (let i = 0; i < sections.value.length; i++) {
+            let currentSection = sections.value[i]
+            if (currentSection.id != idToRemove) {
+                updatedSections.push(currentSection)
+            }
+        }
+
+        sections.value = updatedSections
+        emit("updateSections", updatedSections)
     }
+
+    // Whenever the sections information updates, emit to parent component
+    watch(sections.value, (updatedSections) => {
+        emit("updateSections", updatedSections)
+    })
 
 </script>
 
