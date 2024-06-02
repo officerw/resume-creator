@@ -18,7 +18,7 @@ import subprocess
 class Resume:
     def __init__(self, json):
         self.name = json["name"]
-        self.contact_info = json["contact-info"]
+        self.contact_info = json["contact_info"]
 
         # Get a list of sections associated with this resume
         sections = json["sections"]
@@ -58,8 +58,8 @@ class Resume:
 # }
 class Section:
     def __init__(self, json):
-        self.section_name = json["section-name"]
-        self.is_experiences = json["section-type"] == "experiences"
+        self.section_name = json["section_name"]
+        self.is_experiences = json["section_type"] == "experience"
     
         # Get the experience or list content associated with this section
         self.content = []
@@ -81,8 +81,8 @@ class Section:
 # }
 class List:
     def __init__(self, json):
-        self.list_title = json["list-title"]
-        self.list_content = json["list-content"]
+        self.list_title = json["list_title"]
+        self.list_content = json["list_content"]
 
 # We create an Experience object that
 # organizes experience title, location, tenure,
@@ -99,18 +99,19 @@ class List:
 # }
 class Experience:
     def __init__(self, json):
-        self.experience_title = json["experience-title"]
+        self.experience_title = json["experience_title"]
         self.location = json["location"]
         self.organization = json["organization"]
         self.tenure = json["tenure"]
         self.content = json["content"]
 
-def main():
-    file = open("resume-info.json")
-
+def compile(resumeInfo):
     # Load JSON information into Resume object to be parsed
-    data = Resume(json.load(file))
-
+    print(resumeInfo)
+    print(type(resumeInfo))
+    json_string = json.dumps(resumeInfo)
+    data = Resume(json.loads(json_string))
+    
     sections_info = ""
     for section in data.sections:
         # For each section, add a section header
@@ -182,6 +183,7 @@ def main():
 
     if result.stderr != "":
         print("Error generating PDF from temporary .tex file")
+        return
 
     # Delete temporary .tex file
     os.remove(tempTexFilePath)
@@ -190,6 +192,4 @@ def main():
     os.remove(fileCreationTime + ".aux")
     os.remove(fileCreationTime + ".log")
 
-
-if __name__ == "__main__":
-    main()
+    return fileCreationTime + ".pdf"

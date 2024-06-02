@@ -5,15 +5,15 @@
     const emit = defineEmits(["updateListTitle", "updateListContent"])
 
     // Store list information
-    const title = ref("")
-    const content = ref("")
+    const list_title = ref("")
+    const list_content = ref("")
 
     // Whenever values change, emit values to parent component
-    watch(title, (newTitle) => {
+    watch(list_title, (newTitle) => {
         emit("updateListTitle", newTitle)
     })
 
-    watch(content, (newContent) => {
+    watch(list_content, (newContent) => {
         emit("updateListContent", newContent)
     })
 
@@ -21,8 +21,8 @@
 
 <template>
     <div class="list-container">
-        <textarea id="list-title" v-model="title" rows="1" name="listTitle" placeholder="List Title" maxlength="30"></textarea>
-        <textarea id="list-content" v-model="content" rows="1" name="listContent" placeholder="List Content" maxlength="120"></textarea>
+        <textarea id="list-title" v-model="list_title" rows="1" name="listTitle" placeholder="List Title" maxlength="30"></textarea>
+        <textarea id="list-content" v-model="list_content" rows="1" name="listContent" placeholder="List Content" maxlength="120"></textarea>
     </div>
 </template>
 

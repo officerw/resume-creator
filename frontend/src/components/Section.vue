@@ -25,13 +25,13 @@
     // Store a list of experiences
     let indexExp = 0
     const experiences = ref([
-        { id: ++indexExp, title: "", location: "", organization: "", tenure: "", content: [""]}
+        { id: ++indexExp, experience_title: "", location: "", organization: "", tenure: "", content: [""]}
     ])
 
     // Store list of lists
     let indexList = 0
     const lists = ref([
-        { id: ++indexList, title: "", content: ""}
+        { id: ++indexList, list_title: "", list_content: ""}
     ])
 
     // Tell parent component to delete this section
@@ -41,7 +41,7 @@
 
     function addExperience() {
         experiences.value.push({
-            id: ++indexExp, title: "", location: "", organization: "", tenure: "", content: [""]
+            id: ++indexExp, experience_title: "", location: "", organization: "", tenure: "", content: [""]
         })
     }
 
@@ -51,7 +51,7 @@
     }
 
     function addList() {
-        lists.value.push({ id: ++indexList, title: "", content: ""})
+        lists.value.push({ id: ++indexList, list_title: "", list_content: ""})
     }
 
     function removeList() {
@@ -60,7 +60,7 @@
     }
 
     type Experience = {
-        title: string
+        experience_title: string
         location: string
         organization: string
         tenure: string
@@ -85,7 +85,7 @@
     watch(lists.value, (newLists) => {
         var lists: List[] = []
         for (let i = 0; i < newLists.length; i++) {
-            lists.push({ list_title: newLists[i].title, list_content: newLists[i].content })
+            lists.push({ list_title: newLists[i].list_title, list_content: newLists[i].list_content })
         }
 
         emit("updateLists", lists)
@@ -111,8 +111,8 @@
         <!-- Here, we outline the layout of a list type section -->
         <div v-if="sectionType == 'list'" class="list-section">
             <div v-for="list in lists">
-                <List @update-list-title="(newTitle) => (list.title = newTitle)" 
-                @update-list-content="(newContent) => (list.content = newContent)" />
+                <List @update-list-title="(newTitle) => (list.list_title = newTitle)" 
+                @update-list-content="(newContent) => (list.list_content = newContent)" />
             </div>
 
             <!-- Buttons to add/remove lists to this section -->
@@ -125,7 +125,7 @@
             <draggable :list="experiences" item-key="id">
                 <template #item="{element}">
                     <Experience @update-experience="(experience: Experience) => {
-                        element.title = experience.title
+                        element.title = experience.experience_title
                         element.location = experience.location
                         element.organization = experience.organization
                         element.tenure = experience.tenure

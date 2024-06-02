@@ -8,20 +8,20 @@
     let index = 0
     // Make name and contact information reactive
     const name = ref("")
-    const contacts = ref([
+    const contact_info = ref([
         { id: ++index, info: "" }
     ])
 
     // Add another field of contact information
     function addContactInfo() {
-        contacts.value.push(
+        contact_info.value.push(
             { id: ++index, info: "" }
         )
     }
 
     // Remove field of contact information
     function removeContactInfo() {
-        contacts.value.pop()
+        contact_info.value.pop()
         index -= 1
     }
 
@@ -31,7 +31,7 @@
     })
 
     // Whenever contact information changes, emit updated value to parent component
-    watch(contacts.value, (newContacts) => {
+    watch(contact_info.value, (newContacts) => {
         emit("updateContacts", newContacts)
     })
 
@@ -45,7 +45,7 @@
         <!-- Display contact information textarea fields for user to populate -->
         <h4>Contact Information:</h4>
         <ul class="contact-info-list">
-            <li v-for="contact in contacts" :key="contact.id">
+            <li v-for="contact in contact_info" :key="contact.id">
                 <textarea v-model="contact.info" rows="1" name="ContactInfo" v-bind:placeholder="'Contact Information ' + contact.id.toString()" maxlength="50"></textarea>
             </li>
         </ul>

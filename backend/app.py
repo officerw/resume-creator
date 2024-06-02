@@ -1,5 +1,6 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, send_file
 from flask_cors import CORS
+import createpdf
 
 # APP
 #
@@ -24,5 +25,6 @@ def index(path):
 @app.route("/api/compilepdf", methods=["POST"])
 def compilepdf():
     request_data = request.get_json()
-    print(request_data)
-    return ""
+    # Send pdf created by createpdf
+    pdf_response = send_file(createpdf.compile(request_data))
+    return pdf_response

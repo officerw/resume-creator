@@ -5,18 +5,22 @@
 -->
 
 <script setup lang="ts">
+import { ref } from "vue"
 import PDFViewer from "../components/PDFViewer.vue"
 import ResumeBuilder from "../components/ResumeBuilder.vue"
+
+const pdfURL = ref("/static/default.pdf")
+
 </script>
 
 <template>
     <div class="editor">
         <div id="left-editor">
-            <ResumeBuilder/>
+            <ResumeBuilder @send-pdf-url="(pdfURLStr) => (pdfURL = pdfURLStr)"/>
         </div>
 
         <div id="right-editor">
-            <PDFViewer/>
+            <PDFViewer :pdf-url="pdfURL"/>
         </div>
     </div>
 </template>
@@ -24,9 +28,8 @@ import ResumeBuilder from "../components/ResumeBuilder.vue"
 <style>
     .editor {
         width: 100%;
-        padding: 0 5% 0 5%;
-        height: fit-content;
-        display: block;
+        padding: 0 2% 0 2%;
+        display: flex;
     }
 
     #left-editor {
@@ -34,7 +37,7 @@ import ResumeBuilder from "../components/ResumeBuilder.vue"
         float: left;
         padding: 0.5rem 1rem;
         width: 50%;
-        height: fit-content;
+        height: 100%;
         background-color: #9dbdd9;
     }
 
@@ -42,7 +45,6 @@ import ResumeBuilder from "../components/ResumeBuilder.vue"
         display: block;
         float: right;
         width: 50%;
-        height: fit-content;
         background-color: blue;
     }
 

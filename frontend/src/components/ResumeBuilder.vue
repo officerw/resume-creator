@@ -11,6 +11,7 @@
     import ResumeSections from "../components/ResumeSections.vue"
     import { ref, watch } from "vue"
     
+    const emit = defineEmits(["sendPdfUrl"])
 
     type List = {
         list_title: string
@@ -60,6 +61,7 @@
     // Compile the resume information into a PDF
     async function compilePDF() {
         const url = "/api/compilepdf"
+        // POST request to backend with resume info as JSON
         const response = await fetch(url, {
             method: "POST",
             headers: {
@@ -67,14 +69,15 @@
             },
             body: JSON.stringify(resumeInfo.value)
         })
+        // Get generated pdf as blob response
+        const compiledPDF = await response.blob();
+        const pdfURL = URL.createObjectURL(compiledPDF)
 
-        return 0
+        console.log(resumeInfo.value)
+        console.log("gggggggggg")
+
+        emit("sendPdfUrl", pdfURL)
     }
-
-    watch(resumeInfo.value, (newResume) => {
-        console.log(newResume)
-    })
-
 </script>
 
 <template>

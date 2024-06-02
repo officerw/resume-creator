@@ -21,8 +21,8 @@
 
     type Section = {
         id: number
-        name: string
-        type: string
+        section_name: string
+        section_type: string
         content: (List|Experience)[]
     }
 
@@ -33,7 +33,7 @@
 
     // Add a section based on the type
     function addSection(sectionType: string) {
-        sections.value.push({ id: ++index, name: "", type: sectionType, content: []})
+        sections.value.push({ id: ++index, section_name: "", section_type: sectionType, content: []})
     }
 
     // Remove a section when the user deletes it
@@ -65,9 +65,9 @@
         <div v-if="sections.length > 0" class="sections-list">
             <draggable :list="sections" item-key="id">
                 <template #item="{element}">
-                    <Section :id="element.id" :section-type="element.type" 
+                    <Section :id="element.id" :section-type="element.section_type" 
                         @delete-section="(idToRemove) => removeSection(idToRemove)"
-                        @update-title="(title) => (element.name = title)"
+                        @update-title="(title) => (element.section_name = title)"
                         @update-section-experiences="(experiences) => (element.content = experiences)"
                         @update-lists="(lists: List[]) => (element.content = lists)"></Section>
                 </template>

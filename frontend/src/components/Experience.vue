@@ -6,7 +6,7 @@
 
     // Store information about this experience
     const experience = ref({
-        title: "",
+        experience_title: "",
         location: "",
         organization: "",
         tenure: ""
@@ -58,7 +58,7 @@
         <div class="experience-info">
                 <!-- Textareas where users can enter the context of the experience -->
             <h5>Experience Description</h5>
-            <textarea id="experience-title" v-model="experience.title" rows="1" name="experienceTitle" placeholder="Experience Title" maxlength="30"></textarea>
+            <textarea id="experience-title" v-model="experience.experience_title" rows="1" name="experienceTitle" placeholder="Experience Title" maxlength="30"></textarea>
             <textarea id="experience-location" v-model="experience.location" rows="1" name="experienceLocation" placeholder="Experience Location" maxlength="30"></textarea>
             <textarea id="experience-organization" v-model="experience.organization" rows="1" name="experienceOrganization" placeholder="Experience Organization" maxlength="30"></textarea>
             <textarea id="experience-tenure" v-model="experience.tenure" rows="1" name="experienceTenure" placeholder="Experience Tenure" maxlength="30"></textarea>
