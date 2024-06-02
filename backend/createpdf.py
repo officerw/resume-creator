@@ -193,3 +193,7 @@ def compile(resumeInfo):
     os.remove(fileCreationTime + ".log")
 
     return fileCreationTime + ".pdf"
+
+# Delete file based on name
+def deleteFile(fileName):
+    os.remove(fileName)

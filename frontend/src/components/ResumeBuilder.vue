@@ -73,8 +73,8 @@
         const compiledPDF = await response.blob();
         const pdfURL = URL.createObjectURL(compiledPDF)
 
-        console.log(resumeInfo.value)
-        console.log("gggggggggg")
+        console.log(compiledPDF)
+        console.log(pdfURL)
 
         emit("sendPdfUrl", pdfURL)
     }
@@ -91,7 +91,7 @@
             @update-contacts="(contacts) => updateContacts(contacts)"/>
 
         <ResumeSections
-            @update-sections="(sections) => resumeInfo.sections = sections"/>
+            @update-sections="(sections) => (resumeInfo.sections = sections)"/>
     </div>
 </template>
 

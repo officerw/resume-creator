@@ -26,5 +26,10 @@ def index(path):
 def compilepdf():
     request_data = request.get_json()
     # Send pdf created by createpdf
-    pdf_response = send_file(createpdf.compile(request_data))
+    pdf = createpdf.compile(request_data)
+    pdf_response = send_file(pdf)
+
+    # Delete file created by pdf after it is sendable
+    createpdf.deleteFile(pdf)
+
     return pdf_response

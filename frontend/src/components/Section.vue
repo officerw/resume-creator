@@ -125,7 +125,7 @@
             <draggable :list="experiences" item-key="id">
                 <template #item="{element}">
                     <Experience @update-experience="(experience: Experience) => {
-                        element.title = experience.experience_title
+                        element.experience_title = experience.experience_title
                         element.location = experience.location
                         element.organization = experience.organization
                         element.tenure = experience.tenure
