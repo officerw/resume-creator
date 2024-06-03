@@ -29,6 +29,7 @@ const pdfURL = ref("/static/default.pdf")
     .editor {
         width: 100%;
         padding: 0 2% 0 2%;
+        min-height: -webkit-fill-available;
         display: flex;
     }
 
@@ -37,7 +38,7 @@ const pdfURL = ref("/static/default.pdf")
         float: left;
         padding: 0.5rem 1rem;
         width: 50%;
-        height: 100%;
+        height: auto;
         background-color: #9dbdd9;
     }
 

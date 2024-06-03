@@ -10,13 +10,26 @@ const props = defineProps({
 </script>
 
 <template>
+    <div class="pdf-download">
+        <a :href="pdfUrl" download>Download PDF</a>
+    </div>
     <div class="pdf">
-        <embed :src="pdfUrl" width="100%" height="100%" />
+        <embed id="pdf-embed" :src="pdfUrl" />
     </div>
 </template>
 
 <style>
+    .pdf-download {
+        width: 100%;
+        height: 2rem;
+    }
+
     .pdf {
+        width: 100%;
+        height: calc(100% - 2rem);
+    }
+
+    #pdf-embed {
         width: 100%;
         height: 100%;
     }
