@@ -11,7 +11,7 @@ const props = defineProps({
 
 <template>
     <div class="pdf-download">
-        <a :href="pdfUrl" download>Download PDF</a>
+        <a :href="pdfUrl" download><img src="/static/downloadpdf.png" alt="Download PDF"></a>
     </div>
     <div class="pdf">
         <embed id="pdf-embed" :src="pdfUrl" />
@@ -21,7 +21,18 @@ const props = defineProps({
 <style>
     .pdf-download {
         width: 100%;
-        height: 2rem;
+        height: 2.5rem;
+        background-color: #38383D;
+        display: flex;
+        justify-content: right;
+    }
+
+    .pdf-download img {
+        height: 2.5rem;
+    }
+
+    .pdf-download a {
+        padding: 0 0.5rem;
     }
 
     .pdf {

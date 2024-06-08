@@ -47,7 +47,7 @@ const pdfURL = ref("/static/default.pdf")
         display: block;
         float: right;
         width: var(--editor-section-width);
-        background-color: blue;
+        background-color: #38383D;
     }
 
 </style>
