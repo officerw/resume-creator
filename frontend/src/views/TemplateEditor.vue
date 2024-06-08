@@ -31,13 +31,14 @@ const pdfURL = ref("/static/default.pdf")
         padding: 0 2% 0 2%;
         min-height: -webkit-fill-available;
         display: flex;
+        justify-content: center;
     }
 
     #left-editor {
         display: block;
         float: left;
         padding: 0.5rem 1rem;
-        width: 50%;
+        width: var(--editor-section-width);
         height: auto;
         background-color: #9dbdd9;
     }
@@ -45,7 +46,7 @@ const pdfURL = ref("/static/default.pdf")
     #right-editor {
         display: block;
         float: right;
-        width: 50%;
+        width: var(--editor-section-width);
         background-color: blue;
     }
 

@@ -96,6 +96,7 @@
         display: inline-block;
         padding: 8px;
         margin: 0.5rem;
+        width: calc(100% - 1rem);
     }
 
     .details-list-buttons {
