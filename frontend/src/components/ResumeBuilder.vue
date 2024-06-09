@@ -73,16 +73,54 @@
         const compiledPDF = await response.blob();
         const pdfURL = URL.createObjectURL(compiledPDF)
 
-        console.log(compiledPDF)
-        console.log(pdfURL)
-
         emit("sendPdfUrl", pdfURL)
+    }
+
+    // Save resume info as JSON so users can save progress
+    function saveJSON() {
+        var jsonText = JSON.stringify(resumeInfo.value)
+        var fileName = "resume-info.json"
+        // Create a download element internally to allow download
+        var download = document.createElement("a")
+        download.setAttribute("href", "data:application/json;charset=utf-8," + encodeURIComponent(jsonText))
+        download.setAttribute("download", fileName)
+        // Make download tag invisible on document
+        download.style.display = "none"
+        document.body.appendChild(download)
+        // Have user click on download tag and remove tag
+        download.click()
+        document.body.removeChild(download)
+    }
+
+    // Upload resume info as JSON so users can update info
+    function readJSON() {
+        var upload = (<HTMLInputElement>document.getElementById("read-resume-json"))
+        // Verify user uploaded .json file
+        if (upload != null && upload.files != null && upload.files[0] != undefined && upload.files[0].name.includes(".json")) {
+            var file = upload.files[0]
+
+            // Functionality after reading file
+            var reader = new FileReader()
+            reader.onload = () => {
+                // If the information read is a string, parse as JSON
+                var result = reader.result?.toString()
+                if (result != undefined) {
+                    resumeInfo.value = JSON.parse(result)
+                }
+            }
+
+            // Read file
+            reader.readAsText(file)
+        }
     }
 </script>
 
 <template>
     <div class="compile-resume-info">
         <button id="compile-resume-button" @click="compilePDF()">Compile into PDF</button>
+        <button id="save-resume-json" @click="saveJSON()">Save Progress as JSON</button>
+        <label for="read-resume-json">Upload Progress JSON</label>
+        <input type="file" id="read-resume-json" @change="readJSON()"/>
     </div>
 
     <div class="resume-builder">
