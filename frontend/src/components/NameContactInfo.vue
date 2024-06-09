@@ -3,6 +3,16 @@
 
     // Define emit which will send name/contact info to other components
     const emit = defineEmits(["updateName", "updateContacts"])
+    const props = defineProps({
+        setName: {
+            type: String,
+            required: true
+        },
+        setContacts: {
+            type: Array<String>,
+            required: true
+        }
+    })
 
     // Give each contact information field an index
     let index = 0
@@ -30,9 +40,30 @@
         emit("updateName", newName)
     })
 
+    // Whenever the name is set by a JSON, set the textarea value accordingly
+    watch(() => props.setName, (newSetName) => {
+        name.value = newSetName
+    })
+
     // Whenever contact information changes, emit updated value to parent component
     watch(contact_info.value, (newContacts) => {
         emit("updateContacts", newContacts)
+    })
+
+    // Whenever the contacts are set by a JSON, set the textareas and contacts
+    // list accordingly
+    watch(() => props.setContacts, (newSetContacts: String[]) => {
+        // Remove all previous info
+        while (contact_info.value.length > 1)
+            removeContactInfo()
+
+        // Set contact info for the first item
+        contact_info.value[0].info = newSetContacts[0].toString()
+        // Set remaining items
+        for (let i = 1; i < newSetContacts.length; i++) {
+            addContactInfo()
+            contact_info.value[i].info = newSetContacts[i].toString()
+        }
     })
 
 </script>

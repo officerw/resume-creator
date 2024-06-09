@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-    import { DeprecationTypes, ref, watch } from "vue"
+    import { ref, watch } from "vue"
     import draggable from "vuedraggable"
     import Experience from "./Experience.vue"
     import List from "./List.vue"
@@ -11,6 +11,7 @@
     const emit = defineEmits(["deleteSection", "updateTitle", "updateSectionExperiences", "updateLists"])
 
     // Accept whether this section is a list type or experience type
+    // Accept info set by JSON
     const props = defineProps({
         sectionType: {
             type: String,
@@ -18,6 +19,10 @@
         },
         id: {
             type: Number,
+            required: true
+        },
+        setSection: {
+            type: Object as () => Section,
             required: true
         }
     })
@@ -70,6 +75,42 @@
         list_title: string
         list_content: string
     }
+
+    type Section = {
+        id: number
+        section_name: string
+        section_type: string
+        content: Array<List | Experience>
+    }
+
+    // Whenever the section info set by JSON changes, set the values for this
+    // component accordingly
+    watch(() => props.setSection, (newSetSection) => {
+        sectionTitle.value = newSetSection.section_name
+        if (props.sectionType == "list") {
+            // Add lists set by JSON
+            for (let i = 0; i < newSetSection.content.length; i++) {
+                var setList = newSetSection.content[i] as List
+                
+                addList()
+                var currList = lists.value[i]
+                currList.list_title = setList.list_title
+                currList.list_content = setList.list_content
+            }
+        } else {
+            // Add experiences set by JSON
+            for (let i = 0; i < newSetSection.content.length; i++) {
+                var setExperience = newSetSection.content[i] as Experience
+
+                addExperience()
+                var currExperience = experiences.value[i]
+                currExperience.experience_title = setExperience.experience_title
+                currExperience.location = setExperience.location
+                currExperience.organization = setExperience.organization
+                currExperience.tenure = setExperience.tenure
+            }
+        }
+    })
 
     // Whenever the title changes, emit the value to the parent component
     watch(sectionTitle, (newTitle) => {

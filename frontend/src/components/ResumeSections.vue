@@ -5,6 +5,12 @@
     import Section from "./Section.vue"
 
     const emit = defineEmits(["updateSections"])
+    const props = defineProps({
+        setSections: {
+            type: Array<Section>,
+            required: true
+        }
+    })
 
     type List = {
         list_title: string
@@ -23,7 +29,7 @@
         id: number
         section_name: string
         section_type: string
-        content: (List|Experience)[]
+        content: Array<List|Experience>
     }
 
     // Define index and reactive list of section information
@@ -55,6 +61,23 @@
         emit("updateSections", updatedSections)
     })
 
+    // Whenever the sections are set by JSON, update sections accordingly
+    watch(() => props.setSections, (newSetSections) => {
+        // Remove previous section content
+        while (sections.value.length > 0) {
+            sections.value.pop()
+        }
+
+        // Add section content from JSON
+        for (let i = 0; i < newSetSections.length; i++) {
+            var currSection = sections.value[i]
+
+            addSection(newSetSections[i].section_type)
+            currSection.section_name = newSetSections[i].section_name
+            currSection.content = newSetSections[i].content
+        }
+    })
+
 </script>
 
 <template>
@@ -66,6 +89,11 @@
             <draggable :list="sections" item-key="id">
                 <template #item="{element}">
                     <Section :id="element.id" :section-type="element.section_type" 
+                        :set-section="{ id: element.id,
+                            section_name: element.section_name,
+                            section_type: element.section_type,
+                            content: element.content
+                        }"
                         @delete-section="(idToRemove) => removeSection(idToRemove)"
                         @update-title="(title) => (element.section_name = title)"
                         @update-section-experiences="(experiences) => (element.content = experiences)"

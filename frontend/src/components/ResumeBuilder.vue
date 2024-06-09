@@ -28,9 +28,9 @@
 
     type Section = {
         id: number
-        name: string
-        type: string
-        content: (List|Experience)[]
+        section_name: string
+        section_type: string
+        content: Array<List|Experience>
     }
 
     // Store list of sections
@@ -43,8 +43,15 @@
         sections: sections
     })
 
+    // Store set resume information
+    const setResumeInfo = ref({
+        name: "",
+        contact_info: [""],
+        sections: sections
+    })
+
     interface Contact {
-        id: Number
+        id: number
         info: String
     }
     
@@ -105,7 +112,7 @@
                 // If the information read is a string, parse as JSON
                 var result = reader.result?.toString()
                 if (result != undefined) {
-                    resumeInfo.value = JSON.parse(result)
+                    setResumeInfo.value = JSON.parse(result)
                 }
             }
 
@@ -126,10 +133,13 @@
     <div class="resume-builder">
         <NameContactInfo 
             @update-name="(name) => (resumeInfo.name = name)" 
-            @update-contacts="(contacts) => updateContacts(contacts)"/>
+            @update-contacts="(contacts) => updateContacts(contacts)"
+            :set-name="setResumeInfo.name"
+            :set-contacts="setResumeInfo.contact_info"/>
 
         <ResumeSections
-            @update-sections="(sections) => (resumeInfo.sections = sections)"/>
+            @update-sections="(sections) => (resumeInfo.sections = sections)"
+            :set-sections="setResumeInfo.sections"/>
     </div>
 </template>
 
