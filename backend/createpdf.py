@@ -107,8 +107,6 @@ class Experience:
 
 def compile(resumeInfo):
     # Load JSON information into Resume object to be parsed
-    print(resumeInfo)
-    print(type(resumeInfo))
     json_string = json.dumps(resumeInfo)
     data = Resume(json.loads(json_string))
     
