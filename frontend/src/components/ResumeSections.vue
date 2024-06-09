@@ -108,7 +108,7 @@
             <draggable :list="sections" item-key="id">
                 <template #item="{element}">
                     <Section :id="element.id" :section-type="element.section_type" 
-                        v-model:set-sections="setSections"
+                        :set-sections="setSections"
                         @delete-section="(idToRemove) => removeSection(idToRemove)"
                         @update-title="(title) => (element.section_name = title)"
                         @update-section-experiences="(experiences) => (element.content = experiences)"

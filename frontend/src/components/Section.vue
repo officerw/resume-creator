@@ -85,7 +85,7 @@
 
     // Whenever the section info set by JSON changes, set the values for this
     // component accordingly
-    watch(() => [...props.setSections], (newSetSections) => {
+    watch(() => props.setSections, (newSetSections) => {
         console.log("section updated")
         // Search list of sections for section with corresponding id
         for (let i = 0; i < newSetSections.length; i++) {
