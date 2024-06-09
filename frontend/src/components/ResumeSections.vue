@@ -36,6 +36,9 @@
     var index = 0
     const val: Section[] = []
     const sections = ref(val)
+    // Define list of values set by JSON
+    const setVal: Section[] = []
+    const setSections = ref(setVal)
 
     // Add a section based on the type
     function addSection(sectionType: string) {
@@ -68,14 +71,30 @@
             sections.value.pop()
         }
 
-        // Add section content from JSON
-        for (let i = 0; i < newSetSections.length; i++) {
-            var currSection = sections.value[i]
-
-            addSection(newSetSections[i].section_type)
-            currSection.section_name = newSetSections[i].section_name
-            currSection.content = newSetSections[i].content
+        // Remove previous set section content
+        while (setSections.value.length > 0) {
+            setSections.value.pop()
         }
+
+        // Set list of sections based on JSON info
+        // Determine what the max id is
+        var idList: number[] = []
+        for (let i = 0; i < newSetSections.length; i++) {
+            idList.push(newSetSections[i].id)
+            // Push sections based on order of id's to
+            // set sections (which goes on to Section.vue)
+            // and sections for this component
+            var section = { 
+                id: newSetSections[i].id,
+                section_name: newSetSections[i].section_name,
+                section_type: newSetSections[i].section_type,
+                content: []
+            }
+            sections.value.push(section)
+            setSections.value.push(section)
+        }
+        // Set index to match the indices already used
+        index = Math.max(...idList)
     })
 
 </script>
@@ -89,11 +108,7 @@
             <draggable :list="sections" item-key="id">
                 <template #item="{element}">
                     <Section :id="element.id" :section-type="element.section_type" 
-                        :set-section="{ id: element.id,
-                            section_name: element.section_name,
-                            section_type: element.section_type,
-                            content: element.content
-                        }"
+                        v-model:set-sections="setSections"
                         @delete-section="(idToRemove) => removeSection(idToRemove)"
                         @update-title="(title) => (element.section_name = title)"
                         @update-section-experiences="(experiences) => (element.content = experiences)"

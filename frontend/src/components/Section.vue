@@ -21,8 +21,8 @@
             type: Number,
             required: true
         },
-        setSection: {
-            type: Object as () => Section,
+        setSections: {
+            type: Array<Section>,
             required: true
         }
     })
@@ -85,29 +85,15 @@
 
     // Whenever the section info set by JSON changes, set the values for this
     // component accordingly
-    watch(() => props.setSection, (newSetSection) => {
-        sectionTitle.value = newSetSection.section_name
-        if (props.sectionType == "list") {
-            // Add lists set by JSON
-            for (let i = 0; i < newSetSection.content.length; i++) {
-                var setList = newSetSection.content[i] as List
-                
-                addList()
-                var currList = lists.value[i]
-                currList.list_title = setList.list_title
-                currList.list_content = setList.list_content
-            }
-        } else {
-            // Add experiences set by JSON
-            for (let i = 0; i < newSetSection.content.length; i++) {
-                var setExperience = newSetSection.content[i] as Experience
-
-                addExperience()
-                var currExperience = experiences.value[i]
-                currExperience.experience_title = setExperience.experience_title
-                currExperience.location = setExperience.location
-                currExperience.organization = setExperience.organization
-                currExperience.tenure = setExperience.tenure
+    watch(() => [...props.setSections], (newSetSections) => {
+        console.log("section updated")
+        // Search list of sections for section with corresponding id
+        for (let i = 0; i < newSetSections.length; i++) {
+            // If the new section id matches this section's id, this is
+            // the new info from JSON
+            if (props.id == newSetSections[i].id) {
+                sectionTitle.value = newSetSections[i].section_name
+                break
             }
         }
     })
