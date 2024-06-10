@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-    import { ref, watch } from "vue"
+    import { onMounted, onUpdated, ref, watch } from "vue"
     import draggable from "vuedraggable"
     import Experience from "./Experience.vue"
     import List from "./List.vue"
@@ -38,6 +38,8 @@
     const lists = ref([
         { id: ++indexList, list_title: "", list_content: ""}
     ])
+    var setContentVal: (Experience | List)[] = []
+    const setContent = ref(setContentVal)
 
     // Tell parent component to delete this section
     function deleteSection(idToRemove: number) {
@@ -83,20 +85,35 @@
         content: Array<List | Experience>
     }
 
+    // If the section info has been set by JSON upon mount, set the values for
+    // this
+    onMounted(() => {
+        if (props.setSections.length > 0) {
+            updateWithJSON(props.setSections)
+        }
+    })
+
     // Whenever the section info set by JSON changes, set the values for this
     // component accordingly
     watch(() => props.setSections, (newSetSections) => {
-        console.log("section updated")
+        updateWithJSON(newSetSections)
+    })
+
+    // Update based on JSON info
+    function updateWithJSON(newSetSections: Section[]) {
         // Search list of sections for section with corresponding id
         for (let i = 0; i < newSetSections.length; i++) {
             // If the new section id matches this section's id, this is
             // the new info from JSON
             if (props.id == newSetSections[i].id) {
-                sectionTitle.value = newSetSections[i].section_name
+                var newSetSection = newSetSections[i]
+
+                sectionTitle.value = newSetSection.section_name
+                setContent.value = newSetSection.content
                 break
             }
         }
-    })
+    }
 
     // Whenever the title changes, emit the value to the parent component
     watch(sectionTitle, (newTitle) => {

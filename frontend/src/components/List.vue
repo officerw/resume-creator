@@ -3,6 +3,23 @@
 
     // Emit experience information to parent component
     const emit = defineEmits(["updateListTitle", "updateListContent"])
+    const props = defineProps({
+        content: {
+            type: Array<Experience | List>
+        }
+    })
+
+    type Experience = {
+        experience_title: string
+        location: string
+        organization: string
+        tenure: string
+    }
+
+    type List = {
+        list_title: string
+        list_content: string
+    }
 
     // Store list information
     const list_title = ref("")
@@ -16,6 +33,10 @@
     watch(list_content, (newContent) => {
         emit("updateListContent", newContent)
     })
+
+    // Whenever the content value set by JSON changes, update
+    // textarea content
+
 
 </script>
 
