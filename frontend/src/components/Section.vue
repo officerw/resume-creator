@@ -219,12 +219,13 @@
         background-color: white;
         border-radius: 7px;
         padding: 3px;
-        margin: 3px 0;
+        margin: 8px 0;
     }
 
 
     .section-title {
         display: flex;
+        padding: 0 0.5rem;
     }
 
     #section-title-label {
@@ -260,6 +261,7 @@
 
     .experiences-buttons {
         display: flex;
+        padding: 0.25rem 0.5rem;
     }
 
     .experiences-buttons button {

@@ -124,10 +124,10 @@
 
 <template>
     <div class="compile-resume-info">
-        <button id="compile-resume-button" @click="compilePDF()">Compile into PDF</button>
         <button id="save-resume-json" @click="saveJSON()">Save Progress as JSON</button>
         <label for="read-resume-json">Upload Progress JSON</label>
         <input type="file" id="read-resume-json" @change="readJSON()"/>
+        <button id="compile-resume-button" @click="compilePDF()">Compile into PDF</button>
     </div>
 
     <div class="resume-builder">
@@ -147,5 +147,17 @@
     .resume-builder {
         width: 100%;
         height: fit-content;
+    }
+
+    .compile-resume-info {
+        display: flex;
+    }
+
+    button label input {
+        display: flex;
+        flex-direction:row;
+        justify-content: center;
+        flex: 1;
+        border-radius: 5px;
     }
 </style>

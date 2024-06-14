@@ -126,6 +126,12 @@
 </template>
 
 <style>
+    .sections-list {
+        padding: 5px;
+        background-color: lightgray;
+        border-radius: 10px;
+    }
+
     .section-list-buttons {
         display: flex;
     }
