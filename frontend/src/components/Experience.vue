@@ -1,8 +1,32 @@
 <script setup lang="ts">
-    import { ref, watch } from "vue"
+    import { onMounted, ref, watch } from "vue"
 
     // Emit experience information to parent component
     const emit = defineEmits(["updateExperience", "updateExperienceDetails"])
+    // Props to accept imported JSON info
+    const props = defineProps({
+        content: {
+            type: Array<Experience | List>,
+            required: true
+        },
+        id: {
+            type: Number,
+            required: true
+        }
+    })
+
+    type Experience = {
+        experience_title: string
+        location: string
+        organization: string
+        tenure: string
+        content: string[]
+    }
+
+    type List = {
+        list_title: string
+        list_content: string
+    }
 
     // Store information about this experience
     const experience = ref({
@@ -45,6 +69,52 @@
         }
 
         emit("updateExperienceDetails", newDetailsList)
+    })
+
+    // Update textareas upon JSON import
+    function updateExpWithJSON(newContent: (Experience | List)[]) {
+        // Remember that newContent is just the list of all imported content
+        // for the section this experience is inside
+        if (newContent != undefined && props.id <= newContent.length) {
+            var newExp = newContent[props.id - 1]
+            // Type guard newExp is in fact a Experience, not a List
+            if ("experience_title" in newExp) {
+                experience.value.experience_title = newExp.experience_title
+                experience.value.location = newExp.location
+                experience.value.organization = newExp.organization
+                experience.value.tenure = newExp.tenure
+
+                // Remove previously existing details
+                while (details.value.length > 1) {
+                    removeDetail()
+                }
+
+                // Add all necessary details beyond first
+                for (let i = 1; i < newExp.content.length; i++) {
+                    addDetail()
+                }
+
+                // Add details info from JSON
+                details.value[0].info = newExp.content[0]
+                for (let i = 1; i < newExp.content.length; i++) {
+                    details.value[i].info = newExp.content[i]
+                }
+            }
+        }
+    }
+
+    // Whenever the content value set by JSON changes, update
+    // textarea content
+    watch(() => props.content, (newContent) => {
+        if (newContent != undefined)
+            updateExpWithJSON(newContent)
+    })
+
+    // If the experience info has been set by JSON upon mount, set textarea
+    // values accordingly
+    onMounted(() => {
+        if (props.content != undefined)
+            updateExpWithJSON(props.content)
     })
 
 </script>

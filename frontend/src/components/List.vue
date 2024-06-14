@@ -1,11 +1,17 @@
 <script setup lang="ts">
-    import { ref, watch } from "vue"
+    import { onMounted, ref, watch } from "vue"
 
     // Emit experience information to parent component
     const emit = defineEmits(["updateListTitle", "updateListContent"])
+    // Props to accept imported JSON info
     const props = defineProps({
         content: {
-            type: Array<Experience | List>
+            type: Array<Experience | List>,
+            required: true
+        },
+        id: {
+            type: Number,
+            required: true
         }
     })
 
@@ -34,9 +40,33 @@
         emit("updateListContent", newContent)
     })
 
+    // Update textareas upon JSON import
+    function updateListWithJSON(newContent: (Experience | List)[]) {
+        // Remember that newContent is just the list of all imported content
+        // for the section this list is inside
+        if (newContent != undefined && props.id <= newContent.length) {
+            var newList = newContent[props.id - 1]
+            // Type guard newList is in fact a List, not an Experience
+            if ("list_title" in newList) {
+                list_title.value = newList.list_title
+                list_content.value = newList.list_content
+            }
+        }
+    }
+
     // Whenever the content value set by JSON changes, update
     // textarea content
+    watch(() => props.content, (newContent) => {
+        if (newContent != undefined)
+            updateListWithJSON(newContent)
+    })
 
+    // If the list info has been set by JSON upon mount, set textarea
+    // values accordingly
+    onMounted(() => {
+        if (props.content != undefined)
+            updateListWithJSON(props.content)
+    })
 
 </script>
 

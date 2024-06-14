@@ -88,7 +88,7 @@
                 id: newSetSections[i].id,
                 section_name: newSetSections[i].section_name,
                 section_type: newSetSections[i].section_type,
-                content: []
+                content: newSetSections[i].content
             }
             sections.value.push(section)
             setSections.value.push(section)

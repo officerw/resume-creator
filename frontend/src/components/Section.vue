@@ -38,6 +38,9 @@
     const lists = ref([
         { id: ++indexList, list_title: "", list_content: ""}
     ])
+
+    // If the user imports info via JSON, we set the lists
+    // using the setContent list of content
     var setContentVal: (Experience | List)[] = []
     const setContent = ref(setContentVal)
 
@@ -71,6 +74,7 @@
         location: string
         organization: string
         tenure: string
+        content: string[]
     }
 
     type List = {
@@ -101,16 +105,34 @@
 
     // Update based on JSON info
     function updateWithJSON(newSetSections: Section[]) {
-        // Search list of sections for section with corresponding id
-        for (let i = 0; i < newSetSections.length; i++) {
-            // If the new section id matches this section's id, this is
-            // the new info from JSON
-            if (props.id == newSetSections[i].id) {
-                var newSetSection = newSetSections[i]
+        var newSetSection = newSetSections.find((element) => element.id == props.id)
 
-                sectionTitle.value = newSetSection.section_name
-                setContent.value = newSetSection.content
-                break
+        if (newSetSection == undefined) {
+            return
+        }
+
+        sectionTitle.value = newSetSection.section_name
+        // setContent is a prop going to the actual content Components
+        // in this section
+        setContent.value = newSetSection.content
+
+        // Remove all existing lists
+        while (lists.value.length > 1) {
+            removeList()
+        }
+        
+        // Remove all existing experiences
+        while (experiences.value.length > 1) {
+            removeExperience()
+        }
+        
+        // Add all necessary lists/experiences beyond the first
+        // list/experience
+        for (let i = 1; i < setContent.value.length; i++) {
+            if (props.sectionType == "list") {
+                addList()
+            } else {
+                addExperience()
             }
         }
     }
@@ -151,11 +173,12 @@
             <textarea id="section-title" v-model="sectionTitle" rows="1" name="sectionTitle" placeholder="Section Title Goes Here" maxlength="30"></textarea>
         </div>
         
-
         <!-- Here, we outline the layout of a list type section -->
         <div v-if="sectionType == 'list'" class="list-section">
             <div v-for="list in lists">
-                <List @update-list-title="(newTitle) => (list.list_title = newTitle)" 
+                <List :id="list.id"
+                :content="setContent" 
+                @update-list-title="(newTitle) => (list.list_title = newTitle)" 
                 @update-list-content="(newContent) => (list.list_content = newContent)" />
             </div>
 
@@ -168,7 +191,9 @@
         <div v-else class="experience-section">
             <draggable :list="experiences" item-key="id">
                 <template #item="{element}">
-                    <Experience @update-experience="(experience: Experience) => {
+                    <Experience :id="element.id"
+                    :content="setContent"
+                    @update-experience="(experience: Experience) => {
                         element.experience_title = experience.experience_title
                         element.location = experience.location
                         element.organization = experience.organization
