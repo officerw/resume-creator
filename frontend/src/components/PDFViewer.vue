@@ -1,18 +1,21 @@
 <script setup lang="ts">
 
-const props = defineProps({
-    pdfUrl: {
-        type: String,
-        required: true
-    }
-})
+    // Accept info on the PDF URL
+    const props = defineProps({
+        pdfUrl: {
+            type: String,
+            required: true
+        }
+    })
 
 </script>
 
 <template>
+    <!-- Allow user to download PDF -->
     <div class="pdf-download">
         <a :href="pdfUrl" download><img src="/static/downloadpdf.png" alt="Download PDF"></a>
     </div>
+    <!-- Display pdf when compiled -->
     <div class="pdf">
         <embed id="pdf-embed" :src="pdfUrl" />
     </div>

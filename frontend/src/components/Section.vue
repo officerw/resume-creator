@@ -5,9 +5,30 @@
     import Experience from "./Experience.vue"
     import List from "./List.vue"
 
+    type Experience = {
+        experience_title: string
+        location: string
+        organization: string
+        tenure: string
+        content: string[]
+    }
+
+    type List = {
+        list_title: string
+        list_content: string
+    }
+
+    type Section = {
+        id: number
+        section_name: string
+        section_type: string
+        content: Array<List | Experience>
+    }
+
     const sectionTitle = ref("")
 
-    // Delete this section when requested
+    // When user deletes section, we actually delete it in parent list of sections
+    // Update title in parent component based on user import, along with experience/list info
     const emit = defineEmits(["deleteSection", "updateTitle", "updateSectionExperiences", "updateLists"])
 
     // Accept whether this section is a list type or experience type
@@ -67,26 +88,6 @@
     function removeList() {
         lists.value.pop()
         indexList -= 1
-    }
-
-    type Experience = {
-        experience_title: string
-        location: string
-        organization: string
-        tenure: string
-        content: string[]
-    }
-
-    type List = {
-        list_title: string
-        list_content: string
-    }
-
-    type Section = {
-        id: number
-        section_name: string
-        section_type: string
-        content: Array<List | Experience>
     }
 
     // If the section info has been set by JSON upon mount, set the values for

@@ -1,20 +1,6 @@
 <script setup lang="ts">
     import { onMounted, ref, watch } from "vue"
 
-    // Emit experience information to parent component
-    const emit = defineEmits(["updateExperience", "updateExperienceDetails"])
-    // Props to accept imported JSON info
-    const props = defineProps({
-        content: {
-            type: Array<Experience | List>,
-            required: true
-        },
-        id: {
-            type: Number,
-            required: true
-        }
-    })
-
     type Experience = {
         experience_title: string
         location: string
@@ -27,6 +13,20 @@
         list_title: string
         list_content: string
     }
+
+    // Emit experience context and details to parent component
+    const emit = defineEmits(["updateExperience", "updateExperienceDetails"])
+    // Props to accept imported JSON info
+    const props = defineProps({
+        content: {
+            type: Array<Experience | List>,
+            required: true
+        },
+        id: {
+            type: Number,
+            required: true
+        }
+    })
 
     // Store information about this experience
     const experience = ref({
@@ -71,6 +71,20 @@
         emit("updateExperienceDetails", newDetailsList)
     })
 
+    // Whenever the content value set by JSON changes, update
+    // textarea content
+    watch(() => props.content, (newContent) => {
+        if (newContent != undefined)
+            updateExpWithJSON(newContent)
+    })
+
+    // If the experience info has been set by JSON upon mount, set textarea
+    // values accordingly
+    onMounted(() => {
+        if (props.content != undefined)
+            updateExpWithJSON(props.content)
+    })
+
     // Update textareas upon JSON import
     function updateExpWithJSON(newContent: (Experience | List)[]) {
         // Remember that newContent is just the list of all imported content
@@ -103,24 +117,11 @@
         }
     }
 
-    // Whenever the content value set by JSON changes, update
-    // textarea content
-    watch(() => props.content, (newContent) => {
-        if (newContent != undefined)
-            updateExpWithJSON(newContent)
-    })
-
-    // If the experience info has been set by JSON upon mount, set textarea
-    // values accordingly
-    onMounted(() => {
-        if (props.content != undefined)
-            updateExpWithJSON(props.content)
-    })
-
 </script>
 
 <template>
     <div class="experience-container">
+        <!-- img to indicate that experiences are draggable -->
         <div class="experience-draggable-ui">
             <img src="/static/drag.png" alt="draggable">
         </div>

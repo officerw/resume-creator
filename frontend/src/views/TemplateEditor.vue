@@ -5,20 +5,23 @@
 -->
 
 <script setup lang="ts">
-import { ref } from "vue"
-import PDFViewer from "../components/PDFViewer.vue"
-import ResumeBuilder from "../components/ResumeBuilder.vue"
+    import { ref } from "vue"
+    import PDFViewer from "../components/PDFViewer.vue"
+    import ResumeBuilder from "../components/ResumeBuilder.vue"
 
-const pdfURL = ref("/static/default.pdf")
+    // PDF URL for displaying and downloading
+    const pdfURL = ref("/static/default.pdf")
 
 </script>
 
 <template>
     <div class="editor">
+        <!-- Allow user to construct resume info and organization -->
         <div id="left-editor">
             <ResumeBuilder @send-pdf-url="(pdfURLStr) => (pdfURL = pdfURLStr)"/>
         </div>
 
+        <!-- Display PDF based on constructed resume PDF from ResumeBuilder -->
         <div id="right-editor">
             <PDFViewer :pdf-url="pdfURL"/>
         </div>

@@ -4,14 +4,6 @@
     import draggable from "vuedraggable"
     import Section from "./Section.vue"
 
-    const emit = defineEmits(["updateSections"])
-    const props = defineProps({
-        setSections: {
-            type: Array<Section>,
-            required: true
-        }
-    })
-
     type List = {
         list_title: string
         list_content: string
@@ -31,6 +23,16 @@
         section_type: string
         content: Array<List|Experience>
     }
+
+    // Update section info based on user input
+    const emit = defineEmits(["updateSections"])
+    // Update section info based on JSON imports
+    const props = defineProps({
+        setSections: {
+            type: Array<Section>,
+            required: true
+        }
+    })
 
     // Define index and reactive list of section information
     var index = 0
@@ -84,6 +86,7 @@
             // Push sections based on order of id's to
             // set sections (which goes on to Section.vue)
             // and sections for this component
+            // which preserves section info order upon import
             var section = { 
                 id: newSetSections[i].id,
                 section_name: newSetSections[i].section_name,

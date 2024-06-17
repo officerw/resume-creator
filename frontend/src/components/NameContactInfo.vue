@@ -3,6 +3,7 @@
 
     // Define emit which will send name/contact info to other components
     const emit = defineEmits(["updateName", "updateContacts"])
+    // Import JSON name and contact info
     const props = defineProps({
         setName: {
             type: String,

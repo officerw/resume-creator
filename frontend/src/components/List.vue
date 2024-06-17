@@ -1,7 +1,19 @@
 <script setup lang="ts">
     import { onMounted, ref, watch } from "vue"
 
-    // Emit experience information to parent component
+    type Experience = {
+        experience_title: string
+        location: string
+        organization: string
+        tenure: string
+    }
+
+    type List = {
+        list_title: string
+        list_content: string
+    }
+
+    // Emit list title and content to parent component
     const emit = defineEmits(["updateListTitle", "updateListContent"])
     // Props to accept imported JSON info
     const props = defineProps({
@@ -15,18 +27,6 @@
         }
     })
 
-    type Experience = {
-        experience_title: string
-        location: string
-        organization: string
-        tenure: string
-    }
-
-    type List = {
-        list_title: string
-        list_content: string
-    }
-
     // Store list information
     const list_title = ref("")
     const list_content = ref("")
@@ -38,6 +38,20 @@
 
     watch(list_content, (newContent) => {
         emit("updateListContent", newContent)
+    })
+
+    // Whenever the content value set by JSON changes, update
+    // textarea content
+    watch(() => props.content, (newContent) => {
+        if (newContent != undefined)
+            updateListWithJSON(newContent)
+    })
+
+    // If the list info has been set by JSON upon mount, set textarea
+    // values accordingly
+    onMounted(() => {
+        if (props.content != undefined)
+            updateListWithJSON(props.content)
     })
 
     // Update textareas upon JSON import
@@ -53,20 +67,6 @@
             }
         }
     }
-
-    // Whenever the content value set by JSON changes, update
-    // textarea content
-    watch(() => props.content, (newContent) => {
-        if (newContent != undefined)
-            updateListWithJSON(newContent)
-    })
-
-    // If the list info has been set by JSON upon mount, set textarea
-    // values accordingly
-    onMounted(() => {
-        if (props.content != undefined)
-            updateListWithJSON(props.content)
-    })
 
 </script>
 

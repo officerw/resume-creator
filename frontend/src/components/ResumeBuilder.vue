@@ -9,13 +9,23 @@
 <script setup lang="ts">
     import NameContactInfo from "../components/NameContactInfo.vue"
     import ResumeSections from "../components/ResumeSections.vue"
-    import { ref, watch } from "vue"
+    import { ref } from "vue"
     
-    const emit = defineEmits(["sendPdfUrl"])
+    interface Contact {
+        id: number
+        info: String
+    }
 
     type List = {
         list_title: string
         list_content: string
+    }
+
+    type Section = {
+        id: number
+        section_name: string
+        section_type: string
+        content: Array<List|Experience>
     }
 
     type Experience = {
@@ -26,12 +36,8 @@
         content: string[]
     }
 
-    type Section = {
-        id: number
-        section_name: string
-        section_type: string
-        content: Array<List|Experience>
-    }
+    // Send PDF URL to PDF Viewer to display and allow download
+    const emit = defineEmits(["sendPdfUrl"])
 
     // Store list of sections
     const sections: (Section)[] = []
@@ -43,17 +49,12 @@
         sections: sections
     })
 
-    // Store set resume information
+    // Store set resume information, set by imported JSON
     const setResumeInfo = ref({
         name: "",
         contact_info: [""],
         sections: sections
     })
-
-    interface Contact {
-        id: number
-        info: String
-    }
     
     // Update contacts based on provided information
     function updateContacts(contacts: Contact[]) {
@@ -123,6 +124,7 @@
 </script>
 
 <template>
+    <!-- UI to save resume info as JSON, import JSON, and compile into PDF -->
     <div class="compile-resume-info">
         <button id="save-resume-json" @click="saveJSON()">Save Progress as JSON</button>
         <label for="read-resume-json">Upload Progress JSON</label>
@@ -130,6 +132,7 @@
         <button id="compile-resume-button" @click="compilePDF()">Compile into PDF</button>
     </div>
 
+    <!-- Allow user to build resume name, contact info, and resume sections -->
     <div class="resume-builder">
         <NameContactInfo 
             @update-name="(name) => (resumeInfo.name = name)" 
