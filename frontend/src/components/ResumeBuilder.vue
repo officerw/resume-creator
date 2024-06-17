@@ -9,7 +9,7 @@
 <script setup lang="ts">
     import NameContactInfo from "../components/NameContactInfo.vue"
     import ResumeSections from "../components/ResumeSections.vue"
-    import { ref } from "vue"
+    import { onMounted, ref } from "vue"
     
     interface Contact {
         id: number
@@ -102,7 +102,7 @@
 
     // Upload resume info as JSON so users can update info
     function readJSON() {
-        var upload = (<HTMLInputElement>document.getElementById("read-resume-json"))
+        var upload = (<HTMLInputElement>document.getElementById("json-upload"))
         // Verify user uploaded .json file
         if (upload != null && upload.files != null && upload.files[0] != undefined && upload.files[0].name.includes(".json")) {
             var file = upload.files[0]
@@ -121,14 +121,28 @@
             reader.readAsText(file)
         }
     }
+
+    // On mount, link import button to file input
+    onMounted(() => {
+        const fileInputButton = document.getElementById("import-resume-json")
+        const fileInput = document.getElementById("json-upload")
+
+        fileInputButton?.addEventListener("click", () => {
+            fileInput?.click()
+        })
+    })
 </script>
 
 <template>
     <!-- UI to save resume info as JSON, import JSON, and compile into PDF -->
     <div class="compile-resume-info">
         <button id="save-resume-json" @click="saveJSON()">Save Progress as JSON</button>
-        <label for="read-resume-json">Upload Progress JSON</label>
-        <input type="file" id="read-resume-json" @change="readJSON()"/>
+
+        <div class="read-json">
+            <button id="import-resume-json">Import Resume as JSON</button>
+            <input type="file" id="json-upload" @change="readJSON()" style="display:none;"/>
+        </div>
+        
         <button id="compile-resume-button" @click="compilePDF()">Compile into PDF</button>
     </div>
 
@@ -156,11 +170,18 @@
         display: flex;
     }
 
-    button label input {
+    .read-json {
         display: flex;
-        flex-direction:row;
-        justify-content: center;
-        flex: 1;
-        border-radius: 5px;
+        flex-direction: column;
     }
+
+    .compile-resume-info button  {
+        background-color: #3491ff;
+        border-radius: 10px;
+    }
+
+    .compile-resume-info button {
+        margin: 0 2rem;
+    }
+
 </style>
