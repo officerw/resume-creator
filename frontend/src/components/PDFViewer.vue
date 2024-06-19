@@ -1,4 +1,8 @@
 <script setup lang="ts">
+    import TemplateSelector from "./TemplateSelector.vue"
+
+    // Emit updated selected template
+    const emit = defineEmits(["updateTemplate"])
 
     // Accept info on the PDF URL
     const props = defineProps({
@@ -8,11 +12,16 @@
         }
     })
 
+    function updateTemplate(selectedTemplate: string) {
+        emit("updateTemplate", selectedTemplate)
+    }
+
 </script>
 
 <template>
     <!-- Allow user to download PDF -->
-    <div class="pdf-download">
+    <div class="pdf-compile-menu">
+        <TemplateSelector @update-template="(selectedTemplate: string) => updateTemplate(selectedTemplate)"/>
         <a :href="pdfUrl" download><img src="/static/downloadpdf.png" alt="Download PDF"></a>
     </div>
     <!-- Display pdf when compiled -->
@@ -22,19 +31,19 @@
 </template>
 
 <style>
-    .pdf-download {
+    .pdf-compile-menu {
         width: 100%;
         height: 2.5rem;
         background-color: #38383D;
         display: flex;
-        justify-content: right;
+        justify-content: space-between;
     }
 
-    .pdf-download img {
+    .pdf-compile-menu img {
         height: 2.5rem;
     }
 
-    .pdf-download a {
+    .pdf-compile-menu a {
         padding: 0 0.5rem;
     }
 

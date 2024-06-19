@@ -9,7 +9,7 @@
 <script setup lang="ts">
     import NameContactInfo from "../components/NameContactInfo.vue"
     import ResumeSections from "../components/ResumeSections.vue"
-    import { onMounted, ref } from "vue"
+    import { onMounted, ref, watch } from "vue"
     
     interface Contact {
         id: number
@@ -38,6 +38,14 @@
 
     // Send PDF URL to PDF Viewer to display and allow download
     const emit = defineEmits(["sendPdfUrl"])
+
+    // Accept new selected template
+    const props = defineProps({
+        template: {
+            type: String,
+            required: true
+        }
+    })
 
     // Store list of sections
     const sections: (Section)[] = []
@@ -75,7 +83,7 @@
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(resumeInfo.value)
+            body: JSON.stringify({ template: props.template, resume_info: resumeInfo.value})
         })
         // Get generated pdf as blob response
         const compiledPDF = await response.blob();
@@ -131,6 +139,11 @@
             fileInput?.click()
         })
     })
+
+    // When user selects new template, compile
+    watch(() => props.template, () => {
+        compilePDF()
+    })
 </script>
 
 <template>
@@ -177,7 +190,11 @@
 
     .compile-resume-info button  {
         background-color: #3491ff;
-        border-radius: 10px;
+        border-radius: 7px;
+        display: flex;
+        border: none;
+        align-items: center;
+        justify-content: center;
     }
 
     .compile-resume-info button {

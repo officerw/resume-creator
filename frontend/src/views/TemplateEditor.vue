@@ -11,6 +11,8 @@
 
     // PDF URL for displaying and downloading
     const pdfURL = ref("/static/default.pdf")
+    // Chosen template for resume
+    const selectedTemplate = ref("template1")
 
 </script>
 
@@ -18,12 +20,14 @@
     <div class="editor">
         <!-- Allow user to construct resume info and organization -->
         <div id="left-editor">
-            <ResumeBuilder @send-pdf-url="(pdfURLStr) => (pdfURL = pdfURLStr)"/>
+            <ResumeBuilder :template="selectedTemplate"
+                @send-pdf-url="(pdfURLStr) => (pdfURL = pdfURLStr)"/>
         </div>
 
         <!-- Display PDF based on constructed resume PDF from ResumeBuilder -->
         <div id="right-editor">
-            <PDFViewer :pdf-url="pdfURL"/>
+            <PDFViewer @update-template="(newSelectedTemplate) => { selectedTemplate = newSelectedTemplate }" 
+                :pdf-url="pdfURL"/>
         </div>
     </div>
 </template>

@@ -107,8 +107,9 @@ class Experience:
 
 def compile(resumeInfo):
     # Load JSON information into Resume object to be parsed
-    json_string = json.dumps(resumeInfo)
-    data = Resume(json.loads(json_string))
+    json_obj = json.loads(json.dumps(resumeInfo))
+    template = json_obj["template"]
+    data = Resume(json_obj["resume_info"])
     
     sections_info = ""
     for section in data.sections:
@@ -138,7 +139,7 @@ def compile(resumeInfo):
                 sections_info += "\\listsection{" + list.list_title + "}{" + list.list_content + "}\n\n"
 
     # Read the LaTeX template
-    file = open("./tex_templates/template1.tex", "r")
+    file = open(f"./tex_templates/{template}.tex", "r")
     filestr = file.read()
 
     # Replace name and address placeholders
