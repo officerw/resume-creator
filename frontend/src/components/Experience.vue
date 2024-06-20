@@ -137,7 +137,7 @@
             <!-- Textareas where the user can enter details of the experience -->
             <h5>Experience Details</h5>
             <ul class="experience-details">
-                <li v-for="detail in details">
+                <li class="experience-detail" v-for="detail in details">
                     <textarea id="experience-detail" v-model="detail.info" rows="1" name="experienceDetail" placeholder="Experience Detail" maxlength="60"></textarea>
                 </li>
             </ul>
@@ -160,6 +160,20 @@
 
     .experience-draggable-ui img:hover {
         cursor: grab;
+    }
+
+    .expereince-details {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        margin-left: 1rem;
+    }
+
+    .expereince-detail {
+        background-image: url("/static/bullet.png");
+        background-repeat: no-repeat;
+        background-position: 0 0.4rem;
+        padding-left: 0.6rem;
     }
 
     .experience-container {

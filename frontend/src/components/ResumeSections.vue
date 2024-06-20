@@ -104,7 +104,7 @@
 
 <template>
     <div class="resume-sections">
-        <h4>Sections</h4>
+        <h4 id="sections-title">Sections</h4>
 
         <!-- List of sections -->
         <div v-if="sections.length > 0" class="sections-list">
@@ -129,6 +129,13 @@
 </template>
 
 <style>
+
+    #sections-title {
+        margin: 4px 0;
+        font-weight: bold;
+        text-align: center;
+    }
+
     .sections-list {
         padding: 5px;
         background-color: lightgray;

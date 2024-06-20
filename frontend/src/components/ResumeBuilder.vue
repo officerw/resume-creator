@@ -149,10 +149,10 @@
 <template>
     <!-- UI to save resume info as JSON, import JSON, and compile into PDF -->
     <div class="compile-resume-info">
-        <button id="save-resume-json" @click="saveJSON()">Save Progress as JSON</button>
+        <button id="save-resume-json" @click="saveJSON()"><img src="/static/download.png">Download Progress</button>
 
         <div class="read-json">
-            <button id="import-resume-json">Import Resume as JSON</button>
+            <button id="import-resume-json"><img src="/static/upload.png">Upload Progress</button>
             <input type="file" id="json-upload" @change="readJSON()" style="display:none;"/>
         </div>
         
@@ -181,23 +181,30 @@
 
     .compile-resume-info {
         display: flex;
+        margin: 5px 0;
     }
 
-    .read-json {
+    .read-json button {
+        background-color: #3491ff;
+        border-radius: 7px;
+        height: 2rem;
+        width: 10rem;
         display: flex;
-        flex-direction: column;
+        border: none;
+        align-items: center;
+        justify-content: space-evenly;
+        margin: 0 2rem;
     }
 
     .compile-resume-info button  {
         background-color: #3491ff;
         border-radius: 7px;
+        height: 2rem;
+        width: 10rem;
         display: flex;
         border: none;
         align-items: center;
-        justify-content: center;
-    }
-
-    .compile-resume-info button {
+        justify-content: space-evenly;
         margin: 0 2rem;
     }
 

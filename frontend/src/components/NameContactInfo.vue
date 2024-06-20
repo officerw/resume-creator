@@ -92,6 +92,11 @@
 </template>
 
 <style>
+
+    .name-contact-info-container h4 {
+        font-weight: bold;
+    }
+
     .name-contact-info-container {
         width: 100%;
         height: 100%;
