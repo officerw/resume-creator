@@ -146,6 +146,7 @@ def compile(resumeInfo):
     filestr = filestr.replace("NAME", data.name)
 
     num_contact_info = len(data.contact_info)
+    print(template)
     if template == "template1":
         # If there are more than 3 pieces of contact information, split the
         # contact information into two lists
@@ -168,6 +169,7 @@ def compile(resumeInfo):
             filestr = filestr.replace("CONTACT_INFO_1", contact_info)
             filestr = filestr.replace("CONTACT_INFO_2", "")
     elif template == "template2":
+        print("hello")
         if num_contact_info > 4:
             contact_info_1 = data.contact_info[:num_contact_info//2]
             contact_info_2 = data.contact_info[num_contact_info//2:]
@@ -202,20 +204,19 @@ def compile(resumeInfo):
     result = subprocess.run(["pdflatex", tempTexFilePath], capture_output = True, text = True)
 
     print(result.stdout)
+    print(result.returncode)
 
     if result.stderr != "":
         print("Error generating PDF from temporary .tex file")
+        print(result.stderr)
         return
 
-    # Delete temporary .tex file
-    os.remove(tempTexFilePath)
-
-    # Delete .log and .aux files resulting from PDF creation
-    os.remove(fileCreationTime + ".aux")
-    os.remove(fileCreationTime + ".log")
+    # Delete temporary .tex file, .log, and .aux files from PDF creation
+    #deleteFile(tempTexFilePath, fileCreationTime + ".aux", fileCreationTime + ".log")
 
     return fileCreationTime + ".pdf"
 
 # Delete file based on name
-def deleteFile(fileName):
-    os.remove(fileName)
+def deleteFile(*files):
+    for file in files:
+        os.remove(file)

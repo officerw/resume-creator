@@ -3,6 +3,7 @@
 \usepackage{layout}
 \usepackage{amsmath}
 \usepackage{geometry}
+\usepackage{tabularx}
 
 % Remove paragraph indentation
 \parindent=0pt
@@ -24,17 +25,28 @@ bmargin=0.3in,
 
 % Section header
 \newcommand{\sectionheader}[1]{
-\uppercase{\textbf{{\large #1}}}
+\textbf{{\large #1}}
 \vspace{5pt}
 \hrule
 \vspace{5pt}
 }
 
+% Address and contact info
+\newcommand{\contactinfo}[1]{
+    \begin{center}
+        #1
+    \end{center}
+}
+
 % Experience header
 \newcommand{\experienceheader}[4]{
-\position{#1}{#2}
+\begin{tabular}{ m{2in} | m{3in} m{1.5in} }
+  #4 & #1 & #2
+\end{tabular}
 
-\experience{#3}{#4}
+\begin{tabular}{ m{2in} | m{3in} }
+     & #3
+\end{tabular}
 }
 
 % Position and Location
@@ -58,18 +70,10 @@ bmargin=0.3in,
 \vspace{7pt}
 }
 
-% Address and contact info
-\newcommand{\contactinfo}[2]{
-    \begin{center}
-        #1
-
-        #2
-    \end{center}
-}
-
 \begin{document}
 \name{NAME}
 
+%\begin{adjustwidth}{100pt}{100pt}
 \vspace{10pt}
 
 CONTACT_INFO_1
@@ -79,6 +83,7 @@ CONTACT_INFO_1
 CONTACT_INFO_2
 
 \vspace{10pt}
+%\end{adjustwidth}
 
 SECTIONS
 
