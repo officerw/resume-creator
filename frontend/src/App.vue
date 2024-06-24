@@ -37,7 +37,7 @@ import { ref } from 'vue'
   -->
   <footer>
     <p class="footer">
-      This website was created by William Officer, using Vue JS, Flask, and pdflatex. To reference the source code for this project, visit its <a href="https://github.com/officerw/resume-creator">GitHub repository</a>.
+      This website was created by William Officer, using Vue JS, Flask, and pdflatex. To reference the source code for this project, visit its <a href="https://github.com/officerw/resume-creator">GitHub repository</a>. 2024 © Copyright William Officer.
     </p>
   </footer>
 </template>

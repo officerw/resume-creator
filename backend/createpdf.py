@@ -1,6 +1,7 @@
 from pdflatex import PDFLaTeX
 import os
 import time
+import math
 import json
 import subprocess
 
@@ -127,9 +128,13 @@ def compile(resumeInfo):
                 sections_info += "\\begin{itemize}\n"
                 sections_info += "\\setlength\\itemsep{0pt}\n"
 
+                bullet_point = ""
+                if template == "template4":
+                    bullet_point = "[$\\blacklozenge$]"
+
                 # Add experience descriptions
                 for item in experience.content:
-                    sections_info += "\\item " + item + "\n"
+                    sections_info += "\\item" + bullet_point + " " + item + "\n"
 
                 # End list
                 sections_info += "\\end{itemize}\n\n"
@@ -146,8 +151,12 @@ def compile(resumeInfo):
     filestr = filestr.replace("NAME", data.name)
 
     num_contact_info = len(data.contact_info)
-    print(template)
-    if template == "template1":
+    if template == "template1" or template == "template3":
+        # Select contact info separator based on template
+        contact_info_separator = " $\\bullet$ "
+        if template == "template3":
+            contact_info_separator = " $\\vert$ "
+
         # If there are more than 3 pieces of contact information, split the
         # contact information into two lists
         if num_contact_info > 3:
@@ -155,8 +164,8 @@ def compile(resumeInfo):
             contact_info_2 = data.contact_info[num_contact_info//2:]
 
             # Add bullet points between contact information values
-            contact_info_1 = " $\\bullet$ ".join(contact_info_1)
-            contact_info_2 = " $\\bullet$ ".join(contact_info_2)
+            contact_info_1 = contact_info_separator.join(contact_info_1)
+            contact_info_2 = contact_info_separator.join(contact_info_2)
 
             # Insert into template
             filestr = filestr.replace("CONTACT_INFO_1", contact_info_1)
@@ -169,25 +178,56 @@ def compile(resumeInfo):
             filestr = filestr.replace("CONTACT_INFO_1", contact_info)
             filestr = filestr.replace("CONTACT_INFO_2", "")
     elif template == "template2":
-        print("hello")
         if num_contact_info > 4:
-            contact_info_1 = data.contact_info[:num_contact_info//2]
-            contact_info_2 = data.contact_info[num_contact_info//2:]
+            contact_info_1 = data.contact_info[:math.ceil(num_contact_info/2)]
+            contact_info_2 = data.contact_info[math.ceil(num_contact_info/2):]
 
             # Make two rows of info, evenly spaced information
-            contact_info_1 = "\\hfill " + " \\hfill ".join(contact_info_1) + " \\hfill"
-            contact_info_2 = "\\hfill " + " \\hfill ".join(contact_info_2) + " \\hfill"
+            contact_info_1 = " & ".join(contact_info_1)
+            contact_info_2 = " & ".join(contact_info_2)
+
+            # Make tables to fit data, variable number of elements per row
+            contact_info_str = "\\begin{center}\n\\begin{tabular}{ "
+
+            for x in contact_info_1:
+                contact_info_str = contact_info_str + "c "
+
+            contact_info_str = contact_info_str + "}\n" + contact_info_1 + "\\end{tabular}\\end{center}\n\n"
+
+            contact_info_str = contact_info_str + "\\begin{center}\n\\begin{tabular}{ "
+
+            for x in contact_info_2:
+                contact_info_str = contact_info_str + "c "
+
+            contact_info_str = contact_info_str + "}\n" + contact_info_2 + "\\end{tabular}\\end{center}"
 
             # Insert into template
-            filestr = filestr.replace("CONTACT_INFO_1", contact_info_1)
-            filestr = filestr.replace("CONTACT_INFO_2", contact_info_2)
+            filestr = filestr.replace("CONTACT_INFO", contact_info_str)
         else:
             # Evenly space info
-            contact_info = "\\hfill " + " \\hfill ".join(data.contact_info) + " \\hfill"
+            contact_info = " & ".join(data.contact_info)
+
+            # Make tables to fit data, variable number of elements per row
+            contact_info_str = "\\begin{center}\n\\begin{tabular}{ "
+
+            for x in data.contact_info:
+                contact_info_str = contact_info_str + "c "
+
+            contact_info_str = contact_info_str + "}\n" + contact_info + "\\end{tabular}\\end{center}\n\n"
 
             # Insert into template
-            filestr = filestr.replace("CONTACT_INFO_1", contact_info)
-            filestr = filestr.replace("\n\n\\vspace{5pt}\n\nCONTACT_INFO_2", "")
+            filestr = filestr.replace("CONTACT_INFO", contact_info_str)
+    elif template == "template4":
+        # Add contact info into a table
+        contact_info_str = ""
+        # All all contact items except for first one
+        for contact_item in data.contact_info[:-1]:
+            contact_info_str = contact_info_str + "& " + contact_item + " \\\\\n"
+
+        contact_info_str = contact_info_str + "& " + data.contact_info[len(data.contact_info) - 1]
+
+        # Insert into template
+        filestr = filestr.replace("CONTACT_INFO", contact_info_str)
 
     # Replace sections with actual sections specified by the user
     filestr = filestr.replace("SECTIONS", sections_info)  
@@ -202,9 +242,6 @@ def compile(resumeInfo):
 
     # Create PDF based on .tex file
     result = subprocess.run(["pdflatex", tempTexFilePath], capture_output = True, text = True)
-
-    print(result.stdout)
-    print(result.returncode)
 
     if result.stderr != "":
         print("Error generating PDF from temporary .tex file")
