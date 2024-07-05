@@ -113,35 +113,10 @@ def compile(resumeInfo):
     data = Resume(json_obj["resume_info"])
     
     sections_info = ""
-    for section in data.sections:
-        # For each section, add a section header
-        sections_info += "\\sectionheader{" + section.section_name + "}\n\n"
-
-        # If the section contains experiences, parse the experience information
-        # Otherwise, parse the list information
-        if section.is_experiences:
-            for experience in section.content:
-                # Add experience header
-                sections_info += "\\experienceheader{" + experience.experience_title + "}{" + experience.location + "}{" + experience.organization + "}{" + experience.tenure + "}\n\n"
-
-                # Add a list for the experience descriptions
-                sections_info += "\\begin{itemize}\n"
-                sections_info += "\\setlength\\itemsep{0pt}\n"
-
-                bullet_point = ""
-                if template == "template4":
-                    bullet_point = "[$\\blacklozenge$]"
-
-                # Add experience descriptions
-                for item in experience.content:
-                    sections_info += "\\item" + bullet_point + " " + item + "\n"
-
-                # End list
-                sections_info += "\\end{itemize}\n\n"
-        else:
-            for list in section.content:
-                # Add list title and list content
-                sections_info += "\\listsection{" + list.list_title + "}{" + list.list_content + "}\n\n"
+    if template == "template5":
+        sections_info = addSectionInfoTabularly(data, template)
+    else:
+        sections_info = addSectionInfo(data, template)
 
     # Read the LaTeX template
     file = open(f"./tex_templates/{template}.tex", "r")
@@ -177,7 +152,7 @@ def compile(resumeInfo):
             # Insert into template
             filestr = filestr.replace("CONTACT_INFO_1", contact_info)
             filestr = filestr.replace("CONTACT_INFO_2", "")
-    elif template == "template2":
+    elif template == "template2" or template == "template5":
         if num_contact_info > 4:
             contact_info_1 = data.contact_info[:math.ceil(num_contact_info/2)]
             contact_info_2 = data.contact_info[math.ceil(num_contact_info/2):]
@@ -249,7 +224,7 @@ def compile(resumeInfo):
         return
 
     # Delete temporary .tex file, .log, and .aux files from PDF creation
-    #deleteFile(tempTexFilePath, fileCreationTime + ".aux", fileCreationTime + ".log")
+    deleteFile(tempTexFilePath, fileCreationTime + ".aux", fileCreationTime + ".log")
 
     return fileCreationTime + ".pdf"
 
@@ -257,3 +232,75 @@ def compile(resumeInfo):
 def deleteFile(*files):
     for file in files:
         os.remove(file)
+
+# Add section info normally
+def addSectionInfo(jsonData, template):
+    sections_info = ""
+    for section in jsonData.sections:
+        # For each section, add a section header
+        sections_info += "\\sectionheader{" + section.section_name + "}\n\n"
+
+        # If the section contains experiences, parse the experience information
+        # Otherwise, parse the list information
+        if section.is_experiences:
+            for experience in section.content:
+                # Add experience header
+                sections_info += "\\experienceheader{" + experience.experience_title + "}{" + experience.location + "}{" + experience.organization + "}{" + experience.tenure + "}\n\n"
+
+                # Add a list for the experience descriptions
+                sections_info += "\\begin{itemize}\n"
+                sections_info += "\\setlength\\itemsep{0pt}\n"
+
+                bullet_point = ""
+                if template == "template4":
+                    bullet_point = "[$\\blacklozenge$]"
+
+                # Add experience descriptions
+                for item in experience.content:
+                    sections_info += "\\item" + bullet_point + " " + item + "\n"
+
+                # End list
+                sections_info += "\\end{itemize}\n\n"
+        else:
+            for list in section.content:
+                # Add list title and list content
+                sections_info += "\\listsection{" + list.list_title + "}{" + list.list_content + "}\n\n"
+
+    return sections_info
+
+# Add section info tabularly
+def addSectionInfoTabularly(jsonData, template):
+    sections_info = ""
+    for section in jsonData.sections:
+        # For each section, add a table
+        sections_info += "\\begin{tabular}{ m{1.2in} | m{5.9in} }\n"
+        sections_info += "\\textbf{" + section.section_name + "} "
+
+        # If the section contains experiences, parse the experience info
+        if section.is_experiences:
+            for experience in section.content:
+                # Add experience header into table
+                sections_info += "& \\experienceheader{" + experience.experience_title + "}{" + experience.location + "}{" + experience.organization + "}{" + experience.tenure + "} \\\\\n"
+
+                # Add a list for the experience descriptions
+                sections_info += "& \\begin{itemize}\n"
+                sections_info += "\\setlength\\itemsep{0pt}\n"
+
+                bullet_point = ""
+                
+                # Add experience descriptions
+                for item in experience.content:
+                    sections_info += "\\item" + bullet_point + " " + item + "\n"
+
+                # End list
+                sections_info += "\\end{itemize}\\\\\n"
+        else:
+            for list in section.content:
+                # Add list title and list content
+                sections_info += "& \\listsection{" + list.list_title + "}{" + list.list_content + "}\\\\\n"
+
+        # End section and table
+        sections_info += "& \\\\\n"
+        sections_info += "\\end{tabular}\n\n"
+
+    return sections_info

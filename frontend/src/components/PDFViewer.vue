@@ -49,7 +49,7 @@
 
     .pdf {
         width: 100%;
-        height: calc(100% - 2rem);
+        height: calc(100% - 2.5rem);
     }
 
     #pdf-embed {

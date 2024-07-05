@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage{lmodern}
+\usepackage{layout}
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage{tabularx}
+\usepackage{amssymb}
+
+% Remove paragraph indentation
+\parindent=0pt
+
+% Set margins of resume
+\geometry{
+letterpaper,
+tmargin=0.3in,
+lmargin=0.5in,
+rmargin=0.5in,
+bmargin=0.3in,
+}
+
+% Name header
+\newcommand{\name}[1]{
+\textbf{{\Large #1}}
+\vspace{5pt}
+\hrule}
+
+% Section header
+\newcommand{\sectionheader}[1]{
+\textbf{{\large #1}}
+\vspace{5pt}
+\hrule
+\vspace{5pt}
+}
+
+% Address and contact info
+\newcommand{\contactinfo}[1]{
+    \begin{center}
+        #1
+    \end{center}
+}
+
+% Experience header
+\newcommand{\experienceheader}[4]{
+\position{#1}{#2}
+
+\experience{#3}{#4}
+}
+
+% Position and Location
+\newcommand{\position}[2]{
+\textbf{#1}
+\hfill
+\textbf{#2}
+\vspace{3pt}
+}
+
+% Experience and Tenure
+\newcommand{\experience}[2]{
+\textit{#1}
+\hfill
+\text{#2}
+}
+
+% Skills
+\newcommand{\listsection}[2]{
+\textit{#1}: #2
+\vspace{7pt}
+}
+
+\begin{document}
+\name{NAME}
+
+CONTACT_INFO
+
+SECTIONS
+
+\end{document}
