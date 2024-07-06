@@ -36,7 +36,7 @@
     .editor {
         width: 100%;
         padding: 0 2% 0 2%;
-        min-height: -webkit-fill-available;
+        height: calc(100% - 9rem);
         display: flex;
         justify-content: center;
     }
@@ -46,6 +46,7 @@
         float: left;
         padding: 0.5rem 1rem;
         width: var(--editor-section-width);
+        overflow-y: auto;
         height: auto;
         background-color: #9dbdd9;
     }

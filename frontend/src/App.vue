@@ -44,7 +44,7 @@ import { ref } from 'vue'
 
 <style scoped>
   header {
-    height: max-content;
+    height: 6rem;
     width: 100%;
     padding: 0 10% 0 10%;
     align-items: center;
@@ -109,7 +109,7 @@ import { ref } from 'vue'
     width: 100%;
     bottom:0;
     padding: 0 10% 0 10%;
-    height: 4rem;
+    height: 3rem;
     background-color: #054fb9;
     color: white;
     text-align: center;
