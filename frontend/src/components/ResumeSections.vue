@@ -139,11 +139,12 @@
     .sections-list {
         padding: 5px;
         background-color: lightgray;
-        border-radius: 10px;
+        border-radius: 10px 10px 0 0;
     }
 
     .section-list-buttons {
         display: flex;
+        background-color: lightgray;
     }
 
     button {

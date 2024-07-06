@@ -80,9 +80,19 @@
 
     // If the experience info has been set by JSON upon mount, set textarea
     // values accordingly
+    // Make experience details textareas autoresize based on content
     onMounted(() => {
         if (props.content != undefined)
             updateExpWithJSON(props.content)
+
+        // // Get textareas related to experience details
+        // const detailsTextareas = document.querySelectorAll(".experience-detail-textarea")
+        // // Add event listener to check for content change
+        // detailsTextareas.forEach(element => {
+        //     element.addEventListener("input", () => {
+        //         this.style.height = "auto"
+        //     })
+        // })
     })
 
     // Update textareas upon JSON import
@@ -127,20 +137,22 @@
         </div>
 
         <div class="experience-info">
-                <!-- Textareas where users can enter the context of the experience -->
+            <!-- Textareas where users can enter the context of the experience -->
             <h5>Experience Description</h5>
-            <textarea id="experience-title" v-model="experience.experience_title" rows="1" name="experienceTitle" placeholder="Experience Title" maxlength="30"></textarea>
-            <textarea id="experience-location" v-model="experience.location" rows="1" name="experienceLocation" placeholder="Experience Location" maxlength="30"></textarea>
-            <textarea id="experience-organization" v-model="experience.organization" rows="1" name="experienceOrganization" placeholder="Experience Organization" maxlength="30"></textarea>
-            <textarea id="experience-tenure" v-model="experience.tenure" rows="1" name="experienceTenure" placeholder="Experience Tenure" maxlength="30"></textarea>
+            <textarea id="experience-title" v-model="experience.experience_title" rows="1" name="experienceTitle" placeholder="Experience Title" maxlength="100"></textarea>
+            <textarea id="experience-location" v-model="experience.location" rows="1" name="experienceLocation" placeholder="Experience Location" maxlength="100"></textarea>
+            <textarea id="experience-organization" v-model="experience.organization" rows="1" name="experienceOrganization" placeholder="Experience Organization" maxlength="100"></textarea>
+            <textarea id="experience-tenure" v-model="experience.tenure" rows="1" name="experienceTenure" placeholder="Experience Tenure" maxlength="100"></textarea>
 
             <!-- Textareas where the user can enter details of the experience -->
             <h5>Experience Details</h5>
             <ul class="experience-details">
                 <li class="experience-detail" v-for="detail in details">
-                    <textarea id="experience-detail" v-model="detail.info" rows="1" name="experienceDetail" placeholder="Experience Detail" maxlength="60"></textarea>
+                    <textarea class="experience-detail-textarea" v-model="detail.info" rows="1" name="experienceDetail" placeholder="Experience Detail" maxlength="400"></textarea>
                 </li>
             </ul>
+
+            <textarea-autosize/>
 
             <!-- Buttons that allow the user to add or remove details of the experience -->
             <div class="details-list-buttons">
@@ -167,6 +179,10 @@
         padding: 0;
         margin: 0;
         margin-left: 1rem;
+    }
+
+    .experience-detail-textarea {
+        field-sizing: content;
     }
 
     .expereince-detail {
