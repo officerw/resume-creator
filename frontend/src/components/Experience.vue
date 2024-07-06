@@ -84,15 +84,6 @@
     onMounted(() => {
         if (props.content != undefined)
             updateExpWithJSON(props.content)
-
-        // // Get textareas related to experience details
-        // const detailsTextareas = document.querySelectorAll(".experience-detail-textarea")
-        // // Add event listener to check for content change
-        // detailsTextareas.forEach(element => {
-        //     element.addEventListener("input", () => {
-        //         this.style.height = "auto"
-        //     })
-        // })
     })
 
     // Update textareas upon JSON import

@@ -22,8 +22,7 @@ import { RouterLink, RouterView } from 'vue-router'
     <div class="navbar">
       <nav>
         <ul>
-          <li class="navbar-item"><RouterLink to="/"><h3>Home</h3></RouterLink></li>
-          <li class="navbar-item"><RouterLink to="/editor"><h3>Resume Editor</h3></RouterLink></li>
+          <li class="navbar-item"><RouterLink to="/"><h3>Resume Editor</h3></RouterLink></li>
         </ul>
       </nav>
     </div>

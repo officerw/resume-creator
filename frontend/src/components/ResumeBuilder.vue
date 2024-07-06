@@ -144,6 +144,7 @@
     watch(() => props.template, () => {
         compilePDF()
     })
+
 </script>
 
 <template>

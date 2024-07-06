@@ -4,6 +4,7 @@ import time
 import math
 import json
 import subprocess
+import re
 
 # We create a Resume object that consists of a name,
 # list of contact info, and a list of sections.
@@ -12,14 +13,18 @@ import subprocess
 # following structure:
 # {
 #     "name": "",
-#     "address": "",
-#     "contact-info": ["", "", ""],
+#     "contact_info": ["", "", ""],
 #     "sections": Section[]
 # }
 class Resume:
     def __init__(self, json):
-        self.name = json["name"]
-        self.contact_info = json["contact_info"]
+        self.name = handleSpecialChars(json["name"])
+
+        contact_info = []
+        for item in json["contact_info"]:
+            contact_info.append(handleSpecialChars(item))
+
+        self.contact_info = contact_info
 
         # Get a list of sections associated with this resume
         sections = json["sections"]
@@ -35,7 +40,7 @@ class Resume:
 # following structure:
 # {
 #     "section-name": "",
-#     "section-type": "lists",
+#     "is_experiences": true,
 #     "content": [
 #         {
 #             "list-title": "",
@@ -46,7 +51,7 @@ class Resume:
 # or the following structure
 # {
 #     "section-name": "",
-#     "section-type": "experiences",
+#     "is_experiences": true,
 #     "content": [
 #         {
 #             "experience-title": "",
@@ -59,7 +64,7 @@ class Resume:
 # }
 class Section:
     def __init__(self, json):
-        self.section_name = json["section_name"]
+        self.section_name = handleSpecialChars(json["section_name"])
         self.is_experiences = json["section_type"] == "experience"
     
         # Get the experience or list content associated with this section
@@ -82,8 +87,8 @@ class Section:
 # }
 class List:
     def __init__(self, json):
-        self.list_title = json["list_title"]
-        self.list_content = json["list_content"]
+        self.list_title = handleSpecialChars(json["list_title"])
+        self.list_content = handleSpecialChars(json["list_content"])
 
 # We create an Experience object that
 # organizes experience title, location, tenure,
@@ -100,18 +105,23 @@ class List:
 # }
 class Experience:
     def __init__(self, json):
-        self.experience_title = json["experience_title"]
-        self.location = json["location"]
-        self.organization = json["organization"]
-        self.tenure = json["tenure"]
-        self.content = json["content"]
+        self.experience_title = handleSpecialChars(json["experience_title"])
+        self.location = handleSpecialChars(json["location"])
+        self.organization = handleSpecialChars(json["organization"])
+        self.tenure = handleSpecialChars(json["tenure"])
+
+        content = []
+        for item in json["content"]:
+            content.append(handleSpecialChars(item))
+
+        self.content = content
 
 def compile(resumeInfo):
     # Load JSON information into Resume object to be parsed
     json_obj = json.loads(json.dumps(resumeInfo))
     template = json_obj["template"]
     data = Resume(json_obj["resume_info"])
-    
+
     sections_info = ""
     if template == "template5":
         sections_info = addSectionInfoTabularly(data, template)
@@ -304,3 +314,17 @@ def addSectionInfoTabularly(jsonData, template):
         sections_info += "\\end{tabular}\n\n"
 
     return sections_info
+
+# Remove/update special characters for safety/formatting
+def handleSpecialChars(inputStr):
+    # Remove the following special chars
+    rmv_special_chars = r"[~|\\{}<>^]"
+    # Fix the following special chars to make them usable
+    fix_special_chars = "$#%&€£"
+
+    inputStr = re.sub(rmv_special_chars, "", inputStr)
+
+    for char in fix_special_chars:
+        inputStr = inputStr.replace(char, "\\" + char)
+
+    return inputStr

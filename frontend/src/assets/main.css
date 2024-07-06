@@ -4,3 +4,6 @@ button:hover {
     cursor: pointer;
 }
 
+textarea {
+    min-height: 1.8rem;
+}
