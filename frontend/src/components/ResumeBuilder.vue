@@ -160,6 +160,11 @@
         <button id="compile-resume-button" @click="compilePDF()">Compile into PDF</button>
     </div>
 
+    <!-- Warn the user that certain characters may not be used -->
+    <div id="special-chars-warning">
+        <h5>The following special characters cannot be used: ~, |, \, {, }, <, >, ^</h5>
+    </div>
+
     <!-- Allow user to build resume name, contact info, and resume sections -->
     <div class="resume-builder">
         <NameContactInfo 
@@ -172,6 +177,7 @@
             @update-sections="(sections) => (resumeInfo.sections = sections)"
             :set-sections="setResumeInfo.sections"/>
     </div>
+    
 </template>
 
 <style>
@@ -207,6 +213,10 @@
         align-items: center;
         justify-content: space-evenly;
         margin: 0 2rem;
+    }
+
+    #special-chars-warning {
+        bottom: 0;
     }
 
 </style>

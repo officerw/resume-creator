@@ -310,7 +310,6 @@ def addSectionInfoTabularly(jsonData, template):
                 sections_info += "& \\listsection{" + list.list_title + "}{" + list.list_content + "}\\\\\n"
 
         # End section and table
-        sections_info += "& \\\\\n"
         sections_info += "\\end{tabular}\n\n"
 
     return sections_info
