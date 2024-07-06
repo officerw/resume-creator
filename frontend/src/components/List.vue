@@ -73,7 +73,10 @@
 <template>
     <div class="list-container">
         <textarea id="list-title" v-model="list_title" rows="1" name="listTitle" placeholder="List Title" maxlength="50"></textarea>
-        <textarea id="list-content" v-model="list_content" rows="1" name="listContent" placeholder="List Content" maxlength="400"></textarea>
+        <div class="list-content-container">
+            <img id="list-hierarchy-icon" src="/static/hierarchy-icon.png">
+            <textarea id="list-content" v-model="list_content" rows="1" name="listContent" placeholder="List Content" maxlength="400"></textarea>
+        </div>
     </div>
 </template>
 
@@ -82,6 +85,19 @@
     .list-container {
         padding: 8px;
         margin: 0.5rem;
+    }
+
+    .list-content-container {
+        display: flex;
+    }
+
+    #list-hierarchy-icon {
+        height: 20px;
+        width: 20px;
+    }
+
+    #list-title {
+        width: 67%;
     }
 
     #list-content {

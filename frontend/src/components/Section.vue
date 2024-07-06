@@ -260,18 +260,19 @@
         margin: 5px;
     }
 
-    .experiences-buttons {
+    .experiences-buttons, .lists-buttons {
         display: flex;
         padding: 0.25rem 0.5rem;
     }
 
-    .experiences-buttons button {
+    button.experiences-buttons button.lists-buttons {
         display: flex;
         flex-direction:row;
         justify-content: center;
         flex: 1;
         border-radius: 5px;
     }
+
 
     
 </style>
