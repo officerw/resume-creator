@@ -226,15 +226,19 @@ def compile(resumeInfo):
     tempTexFile.close()
 
     # Create PDF based on .tex file
-    result = subprocess.run(["pdflatex", tempTexFilePath], capture_output = True, text = True)
+    #result = subprocess.run(["pdflatex", tempTexFilePath], capture_output = True, text = True)
+    
+    pdfl = PDFLaTeX.from_texfile(tempTexFilePath)
+    pdf, log, completed_process = pdfl.create_pdf(keep_pdf_file=True)
 
-    if result.stderr != "":
-        print("Error generating PDF from temporary .tex file")
-        print(result.stderr)
-        return
+    #if result.stderr != "":
+    #    print("Error generating PDF from temporary .tex file")
+    #    print(result.stderr)
+    #    return
 
     # Delete temporary .tex file, .log, and .aux files from PDF creation
-    deleteFile(tempTexFilePath, fileCreationTime + ".aux", fileCreationTime + ".log")
+    print(tempTexFilePath)
+    deleteFile(tempTexFilePath)
 
     return fileCreationTime + ".pdf"
 

@@ -77,6 +77,8 @@
     // Compile the resume information into a PDF
     async function compilePDF() {
         const url = "/api/compilepdf"
+
+        console.log(JSON.stringify({ template: props.template, resume_info: resumeInfo.value}))
         // POST request to backend with resume info as JSON
         const response = await fetch(url, {
             method: "POST",
