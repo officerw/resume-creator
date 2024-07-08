@@ -237,7 +237,6 @@ def compile(resumeInfo):
     #    return
 
     # Delete temporary .tex file, .log, and .aux files from PDF creation
-    print(tempTexFilePath)
     deleteFile(tempTexFilePath)
 
     return fileCreationTime + ".pdf"
