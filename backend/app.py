@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, render_template, request, send_file
 from flask_cors import CORS
 import createpdf
+import os
 
 # APP
 #
@@ -16,12 +17,6 @@ app = Flask(__name__, static_folder = "../frontend/dist/static", template_folder
 # Enable CORS
 CORS(app)
 
-# Render main index.html, all JS, CSS, and images of the Vue build
-@app.route("/", defaults={"path": ""})
-@app.route("/<path:path>")
-def index(path):
-    return render_template("index.html")
-
 @app.route("/api/compilepdf", methods=["POST"])
 def compilepdf():
     request_data = request.get_json()
@@ -33,3 +28,6 @@ def compilepdf():
     createpdf.deleteFile(pdf)
 
     return pdf_response
+
+if __name__ == "__main__":
+    app.run(port = os.getenv("PORT"))
