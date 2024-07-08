@@ -1,6 +1,9 @@
 # Python ignores
 backend/__pycache__/*
 
+# Firebase ignores
+.firebase/*
+
 # Logs
 logs
 *.log
