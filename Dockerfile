@@ -8,11 +8,13 @@ WORKDIR /app
 COPY ./backend/requirements.txt .
 RUN pip install -r requirements.txt
 
-
 # Copy source code and latex templates
 COPY ./backend/app.py .
 COPY ./backend/createpdf.py .
 COPY ./backend/tex_templates/* .
+
+# Set port
+EXPOSE 8080
 
 # Run the application
 CMD ["python", "app.py"]
