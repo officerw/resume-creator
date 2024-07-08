@@ -13,8 +13,5 @@ COPY ./backend/app.py .
 COPY ./backend/createpdf.py .
 COPY ./backend/tex_templates/* .
 
-# Set port
-EXPOSE 8080
-
 # Run the application
 CMD ["python", "app.py"]
