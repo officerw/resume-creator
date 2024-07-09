@@ -22,8 +22,5 @@ COPY ./backend/tex_templates/template5.tex .
 
 WORKDIR /app
 
-# Expose port
-EXPOSE 8080
-
 # Run the application
 CMD ["python", "app.py"]
