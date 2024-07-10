@@ -1,19 +1,17 @@
-FROM ubuntu:latest
+FROM bitnami/minideb:bullseye
 
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
 RUN apt-get upgrade -y
 RUN apt-get install -y texlive
 RUN apt-get install -y python3
-RUN apt install -y pipx
-RUN apt-get install -y pip
+RUN apt-get install -y python3-pip
 
 # Create app working directory
 WORKDIR /app
 
 # Install dependencies
 COPY ./backend/requirements.txt .
-RUN pipx install Flask
-RUN apt install python3-pdflatex
+RUN pip install -r requirements.txt
 
 # Copy source code and latex templates
 COPY ./backend/app.py .
