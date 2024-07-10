@@ -13,7 +13,7 @@ WORKDIR /app
 # Install dependencies
 COPY ./backend/requirements.txt .
 RUN pipx install Flask
-RUN pip install pdflatex
+RUN apt install python3-pdflatex
 
 # Copy source code and latex templates
 COPY ./backend/app.py .
