@@ -1,5 +1,8 @@
-# install base texlive image
+# Install base texlive image
 FROM texlive/texlive:latest
+
+# Install pip
+RUN apt-get -y install python3-pip
 
 # Create app working directory
 WORKDIR /app
