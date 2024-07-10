@@ -5,6 +5,7 @@ RUN apt-get upgrade -y
 RUN apt-get install -y texlive
 RUN apt-get install -y python3
 RUN apt install -y pipx
+RUN apt-get install -y pip
 
 # Create app working directory
 WORKDIR /app
