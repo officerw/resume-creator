@@ -11,6 +11,8 @@
     import ResumeSections from "../components/ResumeSections.vue"
     import { onMounted, ref, watch } from "vue"
     
+    const API_ENDPOINT = "https://resume-creator-api-7vvxjiaawa-uc.a.run.app/api/compilepdf"
+
     interface Contact {
         id: number
         info: String
@@ -76,11 +78,9 @@
 
     // Compile the resume information into a PDF
     async function compilePDF() {
-        const url = "/api/compilepdf"
-
         console.log(JSON.stringify({ template: props.template, resume_info: resumeInfo.value}))
         // POST request to backend with resume info as JSON
-        const response = await fetch(url, {
+        const response = await fetch(API_ENDPOINT, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
