@@ -4,14 +4,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
 RUN apt-get upgrade -y
 RUN apt-get install -y texlive
 RUN apt-get install -y python3
-RUN apt-get install -y python3-pip
+RUN apt install -y pipx
 
 # Create app working directory
 WORKDIR /app
 
 # Install dependencies
 COPY ./backend/requirements.txt .
-RUN pip install -r requirements.txt
+RUN pipx install -r requirements.txt
 
 # Copy source code and latex templates
 COPY ./backend/app.py .
