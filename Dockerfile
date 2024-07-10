@@ -12,7 +12,6 @@ WORKDIR /app
 # Install dependencies
 COPY ./backend/requirements.txt .
 RUN pipx install Flask
-RUN pipx install Flask_Cors
 RUN pipx install pdflatex
 
 # Copy source code and latex templates
