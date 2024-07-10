@@ -28,4 +28,4 @@ COPY ./backend/tex_templates/template5.tex .
 WORKDIR /app
 
 # Run the application
-CMD ["python", "app.py"]
+CMD ["python3", "app.py"]
