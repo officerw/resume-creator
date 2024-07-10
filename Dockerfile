@@ -12,7 +12,7 @@ WORKDIR /app
 # Install dependencies
 COPY ./backend/requirements.txt .
 RUN pipx install Flask
-RUN pipx install pdflatex
+RUN pip install pdflatex
 
 # Copy source code and latex templates
 COPY ./backend/app.py .
