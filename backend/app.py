@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, render_template, request, send_file
+from flask_cors import CORS
 import createpdf
 import os
 
@@ -14,7 +15,7 @@ import os
 app = Flask(__name__, static_folder = "../frontend/dist/static", template_folder = "../frontend/dist")
 
 # Enable CORS
-#CORS(app)
+CORS(app)
 
 @app.route("/api/compilepdf", methods=["POST"])
 def compilepdf():
@@ -29,4 +30,4 @@ def compilepdf():
     return pdf_response
 
 if __name__ == "__main__":
-    app.run(host = "0.0.0.0", port = os.getenv("PORT"))
+    app.run(host = "0.0.0.0", port = int(os.getenv("PORT")))
