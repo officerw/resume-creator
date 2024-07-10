@@ -1,5 +1,5 @@
-# install base python image
-FROM python:3.12
+# install base texlive image
+FROM texlive/texlive:latest
 
 # Create app working directory
 WORKDIR /app
