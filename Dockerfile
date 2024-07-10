@@ -1,8 +1,10 @@
-# Install base texlive image
-FROM texlive/texlive:latest
+FROM alpine:3.14
 
-# Install pip
-RUN apt-get -y install python3-pip
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
+RUN apt-get upgrade -y
+RUN apt-get install -y texlive
+RUN apt-get install -y python3
+RUN apt-get install -y python3-pip
 
 # Create app working directory
 WORKDIR /app
