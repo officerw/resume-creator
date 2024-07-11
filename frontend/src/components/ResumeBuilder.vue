@@ -111,25 +111,33 @@
     }
 
     // Upload resume info as JSON so users can update info
-    function readJSON() {
+    function readJSON(usingSampleResume: boolean) {
+        console.log("bro")
         var upload = (<HTMLInputElement>document.getElementById("json-upload"))
-        // Verify user uploaded .json file
-        if (upload != null && upload.files != null && upload.files[0] != undefined && upload.files[0].name.includes(".json")) {
-            var file = upload.files[0]
-
-            // Functionality after reading file
-            var reader = new FileReader()
-            reader.onload = () => {
-                // If the information read is a string, parse as JSON
-                var result = reader.result?.toString()
-                if (result != undefined) {
-                    setResumeInfo.value = JSON.parse(result)
-                }
-            }
-
-            // Read file
-            reader.readAsText(file)
+        // Verify user uploaded .json file or is using sample resume
+        var file = null
+        if (usingSampleResume) {
+            console.log(window.location.pathname + "static/")
+            file = new File([""], "/static/sample_resume.json")
+            console.log(file)
+        } else if (upload != null && upload.files != null && upload.files[0] != undefined && upload.files[0].name.includes(".json")) {
+            file = upload.files[0]
         }
+
+        // Functionality after reading file
+        var reader = new FileReader()
+            reader.onload = () => {
+            // If the information read is a string, parse as JSON
+            var result = reader.result?.toString()
+            console.log(result)
+            if (result != undefined) {
+                setResumeInfo.value = JSON.parse(result)
+            }
+        }
+
+        // Read file
+        if (file != null)
+            reader.readAsText(file)
     }
 
     // On mount, link import button to file input
@@ -156,10 +164,14 @@
 
         <div class="read-json">
             <button id="import-resume-json"><img src="/static/upload.png">Upload Progress</button>
-            <input type="file" id="json-upload" @change="readJSON()" style="display:none;"/>
+            <input type="file" id="json-upload" @change="readJSON(false)" style="display:none;"/>
         </div>
         
         <button id="compile-resume-button" @click="compilePDF()">Compile into PDF</button>
+    </div>
+
+    <div class="import-sample">
+        <button id="sample-resume-button" @click="readJSON(true)">Try Sample Resume</button>
     </div>
 
     <!-- Warn the user that certain characters may not be used -->
@@ -206,6 +218,18 @@
     }
 
     .compile-resume-info button  {
+        background-color: #3491ff;
+        border-radius: 7px;
+        height: 2rem;
+        width: 10rem;
+        display: flex;
+        border: none;
+        align-items: center;
+        justify-content: space-evenly;
+        margin: 0 2rem;
+    }
+
+    .import-sample button  {
         background-color: #3491ff;
         border-radius: 7px;
         height: 2rem;
