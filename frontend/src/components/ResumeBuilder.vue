@@ -9,6 +9,7 @@
 <script setup lang="ts">
     import NameContactInfo from "../components/NameContactInfo.vue"
     import ResumeSections from "../components/ResumeSections.vue"
+    import SampleResume from "../../public/static/sample_resume.json"
     import { onMounted, ref, watch } from "vue"
     
     const API_ENDPOINT = "https://resume-creator-api-7vvxjiaawa-uc.a.run.app/api/compilepdf"
@@ -111,18 +112,8 @@
     }
 
     // Upload resume info as JSON so users can update info
-    function readJSON(usingSampleResume: boolean) {
-        console.log("bro")
+    async function readJSON(usingSampleResume: boolean) {
         var upload = (<HTMLInputElement>document.getElementById("json-upload"))
-        // Verify user uploaded .json file or is using sample resume
-        var file = null
-        if (usingSampleResume) {
-            console.log(window.location.pathname + "static/")
-            file = new File([""], "/static/sample_resume.json")
-            console.log(file)
-        } else if (upload != null && upload.files != null && upload.files[0] != undefined && upload.files[0].name.includes(".json")) {
-            file = upload.files[0]
-        }
 
         // Functionality after reading file
         var reader = new FileReader()
@@ -134,10 +125,18 @@
                 setResumeInfo.value = JSON.parse(result)
             }
         }
-
-        // Read file
-        if (file != null)
+        
+        // Verify user uploaded .json file or is using sample resume
+        var file = null
+        if (usingSampleResume) {
+            setResumeInfo.value = SampleResume
+            // Wait for system to process JSON
+            await new Promise(r => setTimeout(r, 1000));
+            compilePDF()
+        } else if (upload != null && upload.files != null && upload.files[0] != undefined && upload.files[0].name.includes(".json")) {
+            file = upload.files[0]
             reader.readAsText(file)
+        }
     }
 
     // On mount, link import button to file input
@@ -160,18 +159,20 @@
 <template>
     <!-- UI to save resume info as JSON, import JSON, and compile into PDF -->
     <div class="compile-resume-info">
-        <button id="save-resume-json" @click="saveJSON()"><img src="/static/download.png">Download Progress</button>
+        <div class="save-json">
+            <button id="save-resume-json" @click="saveJSON()"><img src="/static/download.png">Download Progress</button>
+        </div>
 
         <div class="read-json">
             <button id="import-resume-json"><img src="/static/upload.png">Upload Progress</button>
             <input type="file" id="json-upload" @change="readJSON(false)" style="display:none;"/>
         </div>
-        
-        <button id="compile-resume-button" @click="compilePDF()">Compile into PDF</button>
     </div>
 
-    <div class="import-sample">
+    <div class="compile-resume-info">
         <button id="sample-resume-button" @click="readJSON(true)">Try Sample Resume</button>
+
+        <button id="compile-resume-button" @click="compilePDF()">Compile into PDF</button>
     </div>
 
     <!-- Warn the user that certain characters may not be used -->
@@ -202,14 +203,23 @@
 
     .compile-resume-info {
         display: flex;
-        margin: 5px 0;
+        margin: 10px 0;
     }
+
+    .save-json {
+        width: 50%;
+    }
+
+    .read-json {
+        width: 50%;
+    }
+
 
     .read-json button {
         background-color: #3491ff;
         border-radius: 7px;
         height: 2rem;
-        width: 10rem;
+        width: 80%;
         display: flex;
         border: none;
         align-items: center;
@@ -221,7 +231,7 @@
         background-color: #3491ff;
         border-radius: 7px;
         height: 2rem;
-        width: 10rem;
+        width: 80%;
         display: flex;
         border: none;
         align-items: center;
@@ -233,7 +243,7 @@
         background-color: #3491ff;
         border-radius: 7px;
         height: 2rem;
-        width: 10rem;
+        width: 80%;
         display: flex;
         border: none;
         align-items: center;

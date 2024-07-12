@@ -72,10 +72,10 @@
 
 <template>
     <div class="list-container">
-        <textarea id="list-title" v-model="list_title" rows="1" name="listTitle" placeholder="List Title" maxlength="50"></textarea>
+        <textarea id="list-title" v-model="list_title" rows="1" name="listTitle" placeholder="List Title" maxlength="75"></textarea>
         <div class="list-content-container">
             <img id="list-hierarchy-icon" src="/static/hierarchy-icon.png">
-            <textarea id="list-content" v-model="list_content" rows="1" name="listContent" placeholder="List Content" maxlength="400"></textarea>
+            <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' class="experience-detail-textarea" id="list-content" v-model="list_content" rows="1" name="listContent" placeholder="List Content" maxlength="800"></textarea>
         </div>
     </div>
 </template>

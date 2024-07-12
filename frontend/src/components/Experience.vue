@@ -80,7 +80,6 @@
 
     // If the experience info has been set by JSON upon mount, set textarea
     // values accordingly
-    // Make experience details textareas autoresize based on content
     onMounted(() => {
         if (props.content != undefined)
             updateExpWithJSON(props.content)
@@ -138,12 +137,11 @@
             <!-- Textareas where the user can enter details of the experience -->
             <h5>Experience Details</h5>
             <ul class="experience-details">
-                <li class="experience-detail" v-for="detail in details">
-                    <textarea class="experience-detail-textarea" v-model="detail.info" rows="1" name="experienceDetail" placeholder="Experience Detail" maxlength="400"></textarea>
+                <li class="experience-detail" style="display:flex;padding:5px 0;" v-for="detail in details">
+                    <img style="height:30px;padding:10px 5px;" src="/static/bullet.png">
+                    <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' class="experience-detail-textarea" v-model="detail.info" rows="1" name="experienceDetail" placeholder="Experience Detail" maxlength="800" autosize></textarea>
                 </li>
             </ul>
-
-            <textarea-autosize/>
 
             <!-- Buttons that allow the user to add or remove details of the experience -->
             <div class="details-list-buttons">
@@ -166,14 +164,18 @@
     }
 
     .expereince-details {
-        list-style-type: none;
         padding: 0;
         margin: 0;
         margin-left: 1rem;
     }
 
-    .experience-detail-textarea {
-        field-sizing: content;
+    .expereince-detail {
+        display: flex;
+    }
+
+    ul.experience-details {
+        list-style-type: none;
+        padding: 0;
     }
 
     .expereince-detail {

@@ -36,7 +36,7 @@
     .editor {
         width: 100%;
         padding: 0 2% 0 2%;
-        height: calc(100% - 9rem);
+        height: calc(100% - 6rem);
         display: flex;
         justify-content: center;
     }

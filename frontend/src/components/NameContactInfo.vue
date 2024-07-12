@@ -111,6 +111,7 @@
         border-radius: 5px;
         width: 100%;
         resize:none;
+        overflow:hidden;
     }
 
     .contact-info-button-img {
