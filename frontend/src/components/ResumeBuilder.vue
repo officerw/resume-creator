@@ -165,14 +165,14 @@
 
         <div class="read-json">
             <button id="import-resume-json"><img src="/static/upload.png">Upload Progress</button>
-            <input type="file" id="json-upload" @change="readJSON(false)" style="display:none;"/>
+            <input type="file" id="json-upload" accept=".json" @change="readJSON(false)" style="display:none;"/>
         </div>
     </div>
 
     <div class="compile-resume-info">
         <button id="sample-resume-button" @click="readJSON(true)">Try Sample Resume</button>
 
-        <button id="compile-resume-button" @click="compilePDF()">Compile into PDF</button>
+        <button id="compile-resume-button" @click="compilePDF()">Convert into PDF</button>
     </div>
 
     <!-- Warn the user that certain characters may not be used -->

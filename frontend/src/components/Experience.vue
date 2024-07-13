@@ -113,6 +113,14 @@
                 for (let i = 1; i < newExp.content.length; i++) {
                     details.value[i].info = newExp.content[i]
                 }
+
+                // Have textareas resize to set text
+                const experienceDetailEntries = document.getElementsByClassName("experience-detail-textarea")
+                for (let i = 0; i < experienceDetailEntries.length; i++) {
+                    var currExperienceDetailEntry = experienceDetailEntries[i]
+                    var scrollHeight = currExperienceDetailEntry.scrollHeight
+                    currExperienceDetailEntry.setAttribute("style", "height:" + scrollHeight + "px")
+                }
             }
         }
     }
@@ -139,7 +147,7 @@
             <ul class="experience-details">
                 <li class="experience-detail" style="display:flex;padding:5px 0;" v-for="detail in details">
                     <img style="height:30px;padding:10px 5px;" src="/static/bullet.png">
-                    <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' class="experience-detail-textarea" v-model="detail.info" rows="1" name="experienceDetail" placeholder="Experience Detail" maxlength="800" autosize></textarea>
+                    <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' class="experience-detail-textarea" v-model="detail.info" rows="1" name="experienceDetail" placeholder="Experience Detail" maxlength="800"></textarea>
                 </li>
             </ul>
 
