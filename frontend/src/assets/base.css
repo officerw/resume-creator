@@ -54,11 +54,11 @@
 @media only screen and (max-width: 749px) {
   :root {
     --title-font-size: 1rem;
-    --normal-font-size: 10px;
+    --normal-font-size: 9px;
     --flex-direction-editor-sections: column;
     --min-height-editor-sections: 50%;
     --header-height: 3rem;
-    --editor-height: calc(180% - var(--header-height));
+    --editor-height: calc(190% - var(--header-height));
     --editor-section-width: 100%;
     --buffer-height: 0px;
   }

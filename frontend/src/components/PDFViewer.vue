@@ -26,7 +26,7 @@
     </div>
     <!-- Display pdf when compiled -->
     <div class="pdf">
-        <object id="pdf-embed" :data="pdfUrl"></object>
+        <object id="pdf-embed" :data="pdfUrl" width="100%"></object>
     </div>
 </template>
 

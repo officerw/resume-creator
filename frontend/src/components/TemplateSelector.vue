@@ -65,6 +65,7 @@
         justify-content: center;
         margin: 0 3px;
         font-size: var(--normal-font-size);
+        padding: 0 3px;
     }
 
     .template-selector button:hover {

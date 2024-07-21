@@ -170,9 +170,13 @@
     </div>
 
     <div class="compile-resume-info">
-        <button id="sample-resume-button" @click="readJSON(true)">Try Sample Resume</button>
+        <div class="sample-resume">
+            <button id="sample-resume-button" @click="readJSON(true)">Try Sample Resume</button>
+        </div>
 
-        <button id="compile-resume-button" @click="compilePDF()">Convert into PDF</button>
+        <div class="compile-resume">
+            <button id="compile-resume-button" @click="compilePDF()">Convert into PDF</button>
+        </div>
     </div>
 
     <!-- Warn the user that certain characters may not be used -->
@@ -214,6 +218,13 @@
         width: 50%;
     }
 
+    .sample-resume {
+        width: 50%;
+    }
+
+    .compile-resume {
+        width: 50%;
+    }
 
     .read-json button {
         background-color: #3491ff;
