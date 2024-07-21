@@ -3,8 +3,12 @@
 /*
   CSS to make editor take up large middle section
 */
-@media only screen and (max-width: 1440px) {
+@media only screen and (min-width: 750px) and (max-width: 1440px) {
   :root {
+    --editor-height: calc(100% - var(--header-height));
+    --flex-direction-editor-sections: row;
+    --min-height-editor-sections: unset;
+    --header-height: 4.5rem;
     --editor-section-width: 50%;
   }
 }
@@ -14,6 +18,9 @@
 */
 @media only screen and (min-width: 1441px) and (max-width: 1920px) {
   :root {
+    --flex-direction-editor-sections: row;
+    --min-height-editor-sections: unset;
+    --header-height: 6rem;
     --editor-section-width: 42%
   }
 }
@@ -23,7 +30,22 @@
 */
 @media only screen and (min-width: 1921px) {
   :root {
+    --flex-direction-editor-sections: row;
+    --min-height-editor-sections: unset;
+    --header-height: 6rem;
     --editor-section-width: 34%;
+  }
+}
+
+/*
+  CSS to have vertical layout for small screen sizes
+*/
+@media only screen and (max-width: 749px) {
+  :root {
+    --flex-direction-editor-sections: column;
+    --min-height-editor-sections: 50%;
+    --header-height: 3rem;
+    --editor-section-width: 100%;
   }
 }
 

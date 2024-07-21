@@ -30,15 +30,20 @@
                 :pdf-url="pdfURL"/>
         </div>
     </div>
+    <div class="buffer">
+        <div class="left-buffer"></div>
+        <div class="right-buffer"></div>
+    </div>
 </template>
 
 <style>
     .editor {
         width: 100%;
         padding: 0 2% 0 2%;
-        height: calc(100% - 6rem);
+        height: calc(100% - var(--header-height));
         display: flex;
         justify-content: center;
+        flex-direction: var(--flex-direction-editor-sections);
     }
 
     #left-editor {
@@ -48,6 +53,7 @@
         width: var(--editor-section-width);
         overflow-y: auto;
         height: auto;
+        min-height: var(--min-height-editor-sections);
         background-color: #9dbdd9;
     }
 
@@ -55,7 +61,31 @@
         display: block;
         float: right;
         width: var(--editor-section-width);
+        min-height: var(--min-height-editor-sections);
         background-color: #38383D;
+    }
+
+    .left-buffer {
+        display: block;
+        float: left;
+        background-color: #9dbdd9;
+        width: var(--editor-section-width);
+        height: 4rem;
+    }
+
+    .right-buffer {
+        display: block;
+        float: right;
+        background-color: #2a2a2e;
+        width: var(--editor-section-width);
+        height: 4rem;
+    }
+
+    .buffer {
+        width: 100%;
+        padding: 0 2% 0 2%;
+        display: flex;
+        justify-content: center;
     }
 
 </style>

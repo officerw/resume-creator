@@ -42,7 +42,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style scoped>
   header {
-    height: 6rem;
+    height: var(--header-height);
     width: 100%;
     padding: 0 10% 0 10%;
     align-items: center;
@@ -63,7 +63,7 @@ import { RouterLink, RouterView } from 'vue-router'
   }
 
   .navbar {
-    height: 6rem;
+    height: var(--header-height);
     display:flex;
     align-items: center;
     justify-content: center;
