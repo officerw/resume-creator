@@ -55,6 +55,7 @@ import { RouterLink, RouterView } from 'vue-router'
     color: white;
     padding: 0 2rem 0 2rem;
     vertical-align: middle;
+    font-size: var(--title-font-size);
   }
 
   nav {
@@ -112,6 +113,7 @@ import { RouterLink, RouterView } from 'vue-router'
     color: white;
     text-align: center;
     display: flex;
+    font-size: var(--normal-font-size);
     justify-content: center;
     align-items: center;
   }

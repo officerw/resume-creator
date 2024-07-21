@@ -70,7 +70,7 @@
         float: left;
         background-color: #9dbdd9;
         width: var(--editor-section-width);
-        height: 4rem;
+        height: var(--buffer-height);
     }
 
     .right-buffer {
@@ -78,7 +78,7 @@
         float: right;
         background-color: #2a2a2e;
         width: var(--editor-section-width);
-        height: 4rem;
+        height: var(--buffer-height);
     }
 
     .buffer {

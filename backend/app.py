@@ -18,9 +18,9 @@ app = Flask(__name__, static_folder = "../frontend/dist/static", template_folder
 CORS(app)
 
 # Uncomment if working locally
-#@app.route("/")
-#def index():
-#    return render_template("index.html")
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 @app.route("/api/compilepdf", methods=["POST"])
 def compilepdf():
@@ -35,5 +35,5 @@ def compilepdf():
     return pdf_response
 
 # Unomment if working in production
-if __name__ == "__main__":
-    app.run(host = "0.0.0.0", port = int(os.getenv("PORT")))
+#if __name__ == "__main__":
+#    app.run(host = "0.0.0.0", port = int(os.getenv("PORT")))

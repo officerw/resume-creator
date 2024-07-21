@@ -64,6 +64,7 @@
         align-items: center;
         justify-content: center;
         margin: 0 3px;
+        font-size: var(--normal-font-size);
     }
 
     .template-selector button:hover {
