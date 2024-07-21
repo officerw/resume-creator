@@ -232,6 +232,7 @@
         height: 2rem;
         width: 80%;
         display: flex;
+        color: #000000;
         border: none;
         align-items: center;
         justify-content: space-evenly;
@@ -243,6 +244,7 @@
         border-radius: 7px;
         height: 2rem;
         width: 80%;
+        color: #000000;
         display: flex;
         border: none;
         align-items: center;
@@ -256,6 +258,7 @@
         height: 2rem;
         width: 80%;
         display: flex;
+        color: #000000;
         border: none;
         align-items: center;
         justify-content: space-evenly;
