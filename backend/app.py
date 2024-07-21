@@ -14,8 +14,8 @@ import os
 # dist/static/ contains all JS, CSS, and image assets of the Vue build
 app = Flask(__name__, static_folder = "../frontend/dist/static", template_folder = "../frontend/dist")
 
-# Enable CORS and restrict to firebase frontend
-CORS(app, origins=["https://resume-creator-5033f.firebaseapp.com/", "https://resume-creator-5033f.web.app/"])
+# Enable CORS
+CORS(app)
 
 # Uncomment if working locally
 #@app.route("/")
