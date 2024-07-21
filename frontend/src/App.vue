@@ -22,7 +22,7 @@ import { RouterLink, RouterView } from 'vue-router'
     <div class="navbar">
       <nav>
         <ul>
-          <li class="navbar-item"><RouterLink to="/"><h3>Resume Editor</h3></RouterLink></li>
+          <li class="navbar-item"><RouterLink to="/">Resume Editor</RouterLink></li>
         </ul>
       </nav>
     </div>
@@ -49,6 +49,10 @@ import { RouterLink, RouterView } from 'vue-router'
     display: flex;
     background-color: #0461cf;
     justify-content: space-evenly;
+  }
+
+  .navbar-item a {
+    font-size: calc(5px + var(--normal-font-size));
   }
 
   header h1 {

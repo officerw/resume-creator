@@ -22,6 +22,7 @@
 @media only screen and (min-width: 1441px) and (max-width: 1920px) {
   :root {
     --title-font-size: 2rem;
+    --editor-height: calc(100% - var(--header-height));
     --normal-font-size: 14px;
     --flex-direction-editor-sections: row;
     --min-height-editor-sections: unset;
@@ -38,6 +39,7 @@
   :root {
     --title-font-size: 2rem;
     --normal-font-size: 14px;
+    --editor-height: calc(100% - var(--header-height));
     --flex-direction-editor-sections: row;
     --min-height-editor-sections: unset;
     --header-height: 6rem;
@@ -56,6 +58,7 @@
     --flex-direction-editor-sections: column;
     --min-height-editor-sections: 50%;
     --header-height: 3rem;
+    --editor-height: calc(180% - var(--header-height));
     --editor-section-width: 100%;
     --buffer-height: 0px;
   }

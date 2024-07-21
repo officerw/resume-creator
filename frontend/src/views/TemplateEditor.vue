@@ -40,7 +40,7 @@
     .editor {
         width: 100%;
         padding: 0 2% 0 2%;
-        height: calc(100% - var(--header-height));
+        height: var(--editor-height);
         display: flex;
         justify-content: center;
         flex-direction: var(--flex-direction-editor-sections);
