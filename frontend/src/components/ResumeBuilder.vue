@@ -12,7 +12,7 @@
     import SampleResume from "../../public/static/sample_resume.json"
     import { onMounted, ref, watch } from "vue"
     
-    const API_ENDPOINT = "https://resume-creator-api-7vvxjiaawa-uc.a.run.app/api/compilepdf"
+    const API_ENDPOINT = "https://resume-creator-cffw6ike3q-uc.a.run.app/api/compilepdf"
 
     interface Contact {
         id: number
