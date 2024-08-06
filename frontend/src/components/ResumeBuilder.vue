@@ -12,14 +12,21 @@
     import SampleResume from "../../public/static/sample_resume.json"
     import { onMounted, ref, watch } from "vue"
     
-    const API_ENDPOINT = "https://resume-creator-cffw6ike3q-uc.a.run.app/api/compilepdf"
+    const API_ENDPOINT = "/api/compilepdf"
+    //const API_ENDPOINT = "https://resume-creator-cffw6ike3q-uc.a.run.app/api/compilepdf"
 
-    interface Contact {
+    type NameContactInfo = {
+        name: string
+        contact_info: Array<ContactInfo>
+    }
+
+    type ContactInfo = {
         id: number
-        info: String
+        info: string
     }
 
     type List = {
+        id: number
         list_title: string
         list_content: string
     }
@@ -28,10 +35,12 @@
         id: number
         section_name: string
         section_type: string
-        content: Array<List|Experience>
+        list_content: Array<List>
+        exp_content: Array<Experience>
     }
 
     type Experience = {
+        id: number
         experience_title: string
         location: string
         organization: string
@@ -39,10 +48,15 @@
         content: string[]
     }
 
+    type ResumeInfo = {
+        nameContactInfo: NameContactInfo
+        sections: Array<Section>
+    }
+
     // Send PDF URL to PDF Viewer to display and allow download
     const emit = defineEmits(["sendPdfUrl"])
 
-    // Accept new selected template
+    // Accept info on the template selected
     const props = defineProps({
         template: {
             type: String,
@@ -50,35 +64,18 @@
         }
     })
 
-    // Store list of sections
-    const sections: (Section)[] = []
-
-    // Store resume information
+    // Store resume info
     const resumeInfo = ref({
-        name: "",
-        contact_info: [""],
-        sections: sections
+        nameContactInfo: {
+            name: "",
+            contact_info: [{ id: 1, info: ""}]
+        },
+        sections: new Array<Section>()
     })
-
-    // Store set resume information, set by imported JSON
-    const setResumeInfo = ref({
-        name: "",
-        contact_info: [""],
-        sections: sections
-    })
-    
-    // Update contacts based on provided information
-    function updateContacts(contacts: Contact[]) {
-        let list = []
-        for (let i = 0; i < contacts.length; i++) {
-            list.push(contacts[i].info.valueOf())
-        }
-
-        resumeInfo.value.contact_info = list
-    }
 
     // Compile the resume information into a PDF
     async function compilePDF() {
+        console.log("Test")
         console.log(JSON.stringify({ template: props.template, resume_info: resumeInfo.value}))
         // POST request to backend with resume info as JSON
         const response = await fetch(API_ENDPOINT, {
@@ -113,29 +110,72 @@
 
     // Upload resume info as JSON so users can update info
     async function readJSON(usingSampleResume: boolean) {
+        debugger
         var upload = (<HTMLInputElement>document.getElementById("json-upload"))
 
         // Functionality after reading file
         var reader = new FileReader()
-            reader.onload = () => {
+        reader.onload = () => {
             // If the information read is a string, parse as JSON
             var result = reader.result?.toString()
-            console.log(result)
             if (result != undefined) {
-                setResumeInfo.value = JSON.parse(result)
+                return JSON.parse(result)
             }
         }
         
         // Verify user uploaded .json file or is using sample resume
         var file = null
+        var uploadedResumeInfo
         if (usingSampleResume) {
-            setResumeInfo.value = SampleResume
-            // Wait for system to process JSON
-            await new Promise(r => setTimeout(r, 1000));
-            compilePDF()
+            uploadedResumeInfo = JSON.parse(JSON.stringify(SampleResume))
+            console.log(SampleResume)
         } else if (upload != null && upload.files != null && upload.files[0] != undefined && upload.files[0].name.includes(".json")) {
             file = upload.files[0]
-            reader.readAsText(file)
+            console.log(file)
+            uploadedResumeInfo = reader.readAsText(file)
+            console.log(uploadedResumeInfo)
+        }
+
+        // Use uploaded resume info to modify internal resume info
+        if (uploadedResumeInfo) {
+            setResumeBasedOnJSON(uploadedResumeInfo)
+        }
+            
+    }
+
+    // Use uploaded resume info to modify internal resume info
+    function setResumeBasedOnJSON(uploadedResumeInfo: ResumeInfo) {
+        console.log(uploadedResumeInfo)
+
+        // Set name based on uploaded info
+        resumeInfo.value.nameContactInfo.name = uploadedResumeInfo.nameContactInfo.name
+
+        // Delete previous contact info and replace with new info
+        var contactInfo = resumeInfo.value.nameContactInfo.contact_info
+        var uploadedContactInfo = uploadedResumeInfo.nameContactInfo.contact_info
+        while (contactInfo.length > 1)
+            contactInfo.pop()
+        // Set new info
+        contactInfo[0].info = uploadedContactInfo[0].info
+        for (let i = 1; i < uploadedContactInfo.length; i++) {
+            contactInfo.push({ id: i + 1, info: uploadedContactInfo[i].info })
+        }
+        
+        // Delete previous sections and replace with new info
+        var sections = resumeInfo.value.sections
+        var uploadedSections = uploadedResumeInfo.sections
+        while (sections.length > 0)
+            sections.pop()
+
+        // Set new sections
+        for (let i = 0; i < uploadedSections.length; i++) {
+            sections.push({ id: i + 1, section_name: uploadedSections[i].section_name,
+                section_type: uploadedSections[i].section_type,
+                list_content: uploadedSections[i].list_content,
+                exp_content: uploadedSections[i].exp_content
+            })
+
+            console.log(sections)
         }
     }
 
@@ -186,15 +226,9 @@
 
     <!-- Allow user to build resume name, contact info, and resume sections -->
     <div class="resume-builder">
-        <NameContactInfo 
-            @update-name="(name) => (resumeInfo.name = name)" 
-            @update-contacts="(contacts) => updateContacts(contacts)"
-            :set-name="setResumeInfo.name"
-            :set-contacts="setResumeInfo.contact_info"/>
+        <NameContactInfo v-model="resumeInfo.nameContactInfo"/>
 
-        <ResumeSections
-            @update-sections="(sections) => (resumeInfo.sections = sections)"
-            :set-sections="setResumeInfo.sections"/>
+        <ResumeSections v-model="resumeInfo.sections"/>
     </div>
     
 </template>

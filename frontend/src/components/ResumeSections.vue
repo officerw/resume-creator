@@ -5,11 +5,13 @@
     import Section from "./Section.vue"
 
     type List = {
+        id: number
         list_title: string
         list_content: string
     }
 
     type Experience = {
+        id: number
         experience_title: string
         location: string
         organization: string
@@ -21,30 +23,35 @@
         id: number
         section_name: string
         section_type: string
-        content: Array<List|Experience>
+        list_content: Array<List>
+        exp_content: Array<Experience>
     }
 
-    // Update section info based on user input
-    const emit = defineEmits(["updateSections"])
-    // Update section info based on JSON imports
-    const props = defineProps({
-        setSections: {
-            type: Array<Section>,
-            required: true
-        }
+    const sections = defineModel<Array<Section>>({
+        required: true
     })
-
-    // Define index and reactive list of section information
-    var index = 0
-    const val: Section[] = []
-    const sections = ref(val)
-    // Define list of values set by JSON
-    const setVal: Section[] = []
-    const setSections = ref(setVal)
 
     // Add a section based on the type
     function addSection(sectionType: string) {
-        sections.value.push({ id: ++index, section_name: "", section_type: sectionType, content: []})
+        // Get index of section
+        let index = 1
+        // If there is at least one section, get the maximum index value
+        if (sections.value.length > 0) {
+            for (let i = 0; i < sections.value.length; i++) {
+                var currSection = sections.value[i]
+
+                if (currSection.id >= index) {
+                    index = currSection.id + 1
+                }
+            }
+        }
+
+        // Add section based on type
+        if (sectionType == "list") {
+            sections.value.push({ id: index, section_name: "", section_type: sectionType, list_content: [{ id: 1, list_title: "", list_content: "" }], exp_content: []})
+        } else {
+            sections.value.push({ id: index, section_name: "", section_type: sectionType, list_content: [], exp_content: [{ id: 1, experience_title: "", location: "", organization: "", tenure: "", content: [""] }] })
+        }
     }
 
     // Remove a section when the user deletes it
@@ -58,47 +65,7 @@
         }
 
         sections.value = updatedSections
-        emit("updateSections", updatedSections)
     }
-
-    // Whenever the sections information updates, emit to parent component
-    watch(sections.value, (updatedSections) => {
-        emit("updateSections", updatedSections)
-    })
-
-    // Whenever the sections are set by JSON, update sections accordingly
-    watch(() => props.setSections, (newSetSections) => {
-        // Remove previous section content
-        while (sections.value.length > 0) {
-            sections.value.pop()
-        }
-
-        // Remove previous set section content
-        while (setSections.value.length > 0) {
-            setSections.value.pop()
-        }
-
-        // Set list of sections based on JSON info
-        // Determine what the max id is
-        var idList: number[] = []
-        for (let i = 0; i < newSetSections.length; i++) {
-            idList.push(newSetSections[i].id)
-            // Push sections based on order of id's to
-            // set sections (which goes on to Section.vue)
-            // and sections for this component
-            // which preserves section info order upon import
-            var section = { 
-                id: newSetSections[i].id,
-                section_name: newSetSections[i].section_name,
-                section_type: newSetSections[i].section_type,
-                content: newSetSections[i].content
-            }
-            sections.value.push(section)
-            setSections.value.push(section)
-        }
-        // Set index to match the indices already used
-        index = Math.max(...idList)
-    })
 
 </script>
 
@@ -108,16 +75,16 @@
 
         <!-- List of sections -->
         <div v-if="sections.length > 0" class="sections-list">
-            <draggable :list="sections" item-key="id">
+            <div v-for="(section, i) in sections">
+                <Section v-model="sections[i]" 
+                @delete-section="(idToRemove) => removeSection(idToRemove)" ></Section>
+            </div>
+            <!--<draggable v-model="sections" item-key="id">
                 <template #item="{element}">
-                    <Section :id="element.id" :section-type="element.section_type" 
-                        :set-sections="setSections"
-                        @delete-section="(idToRemove) => removeSection(idToRemove)"
-                        @update-title="(title) => (element.section_name = title)"
-                        @update-section-experiences="(experiences) => (element.content = experiences)"
-                        @update-lists="(lists: List[]) => (element.content = lists)"></Section>
+                    <Section v-model="element"
+                        @delete-section="(idToRemove) => removeSection(idToRemove)"></Section>
                 </template>
-            </draggable>
+            </draggable>-->
         </div>
 
         <!-- The following section allows the user to add different kinds of sections to the resume builder -->

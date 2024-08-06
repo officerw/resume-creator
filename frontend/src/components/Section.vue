@@ -6,6 +6,7 @@
     import List from "./List.vue"
 
     type Experience = {
+        id: number
         experience_title: string
         location: string
         organization: string
@@ -14,6 +15,7 @@
     }
 
     type List = {
+        id: number
         list_title: string
         list_content: string
     }
@@ -22,48 +24,15 @@
         id: number
         section_name: string
         section_type: string
-        content: Array<List | Experience>
+        list_content: Array<List>
+        exp_content: Array<Experience>
     }
 
-    const sectionTitle = ref("")
+    const emit = defineEmits(["deleteSection"])
 
-    // When user deletes section, we actually delete it in parent list of sections
-    // Update title in parent component based on user import, along with experience/list info
-    const emit = defineEmits(["deleteSection", "updateTitle", "updateSectionExperiences", "updateLists"])
-
-    // Accept whether this section is a list type or experience type
-    // Accept info set by JSON
-    const props = defineProps({
-        sectionType: {
-            type: String,
-            required: true
-        },
-        id: {
-            type: Number,
-            required: true
-        },
-        setSections: {
-            type: Array<Section>,
-            required: true
-        }
+    const sectionInfo = defineModel<Section>({
+        required: true
     })
-
-    // Store a list of experiences
-    let indexExp = 0
-    const experiences = ref([
-        { id: ++indexExp, experience_title: "", location: "", organization: "", tenure: "", content: [""]}
-    ])
-
-    // Store list of lists
-    let indexList = 0
-    const lists = ref([
-        { id: ++indexList, list_title: "", list_content: ""}
-    ])
-
-    // If the user imports info via JSON, we set the lists
-    // using the setContent list of content
-    var setContentVal: (Experience | List)[] = []
-    const setContent = ref(setContentVal)
 
     // Tell parent component to delete this section
     function deleteSection(idToRemove: number) {
@@ -71,92 +40,30 @@
     }
 
     function addExperience() {
-        experiences.value.push({
-            id: ++indexExp, experience_title: "", location: "", organization: "", tenure: "", content: [""]
-        })
-    }
-
-    function removeExperience() {
-        experiences.value.pop()
-        indexExp -= 1
+        // Get experience index
+        let index = 1
+        if (sectionInfo.value.exp_content.length != 0)
+            index = sectionInfo.value.exp_content[sectionInfo.value.exp_content.length - 1].id + 1
+        
+        sectionInfo.value.exp_content.push({id: index, experience_title: "", location: "", organization: "", tenure: "", content: [""]})
     }
 
     function addList() {
-        lists.value.push({ id: ++indexList, list_title: "", list_content: ""})
-    }
-
-    function removeList() {
-        lists.value.pop()
-        indexList -= 1
-    }
-
-    // If the section info has been set by JSON upon mount, set the values for
-    // this
-    onMounted(() => {
-        if (props.setSections.length > 0) {
-            updateWithJSON(props.setSections)
-        }
-    })
-
-    // Whenever the section info set by JSON changes, set the values for this
-    // component accordingly
-    watch(() => props.setSections, (newSetSections) => {
-        updateWithJSON(newSetSections)
-    })
-
-    // Update based on JSON info
-    function updateWithJSON(newSetSections: Section[]) {
-        var newSetSection = newSetSections.find((element) => element.id == props.id)
-
-        if (newSetSection == undefined) {
-            return
-        }
-
-        sectionTitle.value = newSetSection.section_name
-        // setContent is a prop going to the actual content Components
-        // in this section
-        setContent.value = newSetSection.content
-
-        // Remove all existing lists
-        while (lists.value.length > 1) {
-            removeList()
-        }
+        // Get list index
+        let index = 1
+        if (sectionInfo.value.list_content.length != 0)
+            index = sectionInfo.value.list_content[sectionInfo.value.list_content.length - 1].id + 1
         
-        // Remove all existing experiences
-        while (experiences.value.length > 1) {
-            removeExperience()
-        }
-        
-        // Add all necessary lists/experiences beyond the first
-        // list/experience
-        for (let i = 1; i < setContent.value.length; i++) {
-            if (props.sectionType == "list") {
-                addList()
-            } else {
-                addExperience()
-            }
-        }
+        sectionInfo.value.list_content.push({id: index, list_title: "", list_content: ""})
     }
 
-    // Whenever the title changes, emit the value to the parent component
-    watch(sectionTitle, (newTitle) => {
-        emit("updateTitle", newTitle)
-    })
-
-    // Whenever experience information changes provided by the user, emit the value to parent component
-    watch(experiences.value, (newExperiences) => {
-        emit("updateSectionExperiences", newExperiences)
-    })
-
-    // Whenever the lists change, emit the value to the parent component
-    watch(lists.value, (newLists) => {
-        var lists: List[] = []
-        for (let i = 0; i < newLists.length; i++) {
-            lists.push({ list_title: newLists[i].list_title, list_content: newLists[i].list_content })
+    function removeExperienceOrList(removeList: boolean) {
+        if (removeList) {
+            sectionInfo.value.list_content.pop()
+        } else {
+            sectionInfo.value.exp_content.pop()
         }
-
-        emit("updateLists", lists)
-    })
+    }
 
 </script>
 
@@ -165,51 +72,41 @@
         <!-- Allow users to delete this selection and give some UI indication that the section is draggable -->
         <div id="section-header">
             <img id="draggable-ui" src="/static/drag.png" alt="draggable">
-            <button id="delete-section" @click="deleteSection(id)"><img src="/static/close.png" alt="close"></button>
+            <button id="delete-section" @click="deleteSection(sectionInfo.id)"><img src="/static/close.png" alt="close"></button>
         </div>
         
         <!-- Allow the user to dictate the title of the section -->
         <div class="section-title">
             <h4 id="section-title-label">Section Title:</h4>
-            <textarea id="section-title" v-model="sectionTitle" rows="1" name="sectionTitle" placeholder="Section Title Goes Here" maxlength="30"></textarea>
+            <textarea id="section-title" v-model="sectionInfo.section_name" rows="1" name="sectionTitle" placeholder="Section Title Goes Here" maxlength="30"></textarea>
         </div>
         
         <!-- Here, we outline the layout of a list type section -->
-        <div v-if="sectionType == 'list'" class="list-section">
-            <div v-for="list in lists">
-                <List :id="list.id"
-                :content="setContent" 
-                @update-list-title="(newTitle) => (list.list_title = newTitle)" 
-                @update-list-content="(newContent) => (list.list_content = newContent)" />
+        <div v-if="sectionInfo.section_type == 'list'" class="list-section">
+            <div v-for="(list, i) in sectionInfo.list_content">
+                <List v-model="sectionInfo.list_content[i]" />
             </div>
 
             <!-- Buttons to add/remove lists to this section -->
             <div class="lists-buttons">
-                <button v-if="lists.length < 15" id="add-list" @click="addList()">Add List</button>
-                <button v-if="lists.length > 1" id="remove-list" @click="removeList()">Remove List</button>
+                <button v-if="sectionInfo.list_content.length < 15" id="add-list" @click="addList()">Add List</button>
+                <button v-if="sectionInfo.list_content.length > 1" id="remove-list" @click="removeExperienceOrList(true)">Remove List</button>
             </div>
         </div> <!-- Here, we outline the layout of a list of experiences type section and update experience details based on user input -->
         <div v-else class="experience-section">
-            <draggable :list="experiences" item-key="id">
+            <div v-for="(experience, i) in sectionInfo.exp_content">
+                <Experience v-model="sectionInfo.exp_content[i]" ></Experience>
+            </div>
+            <!--<draggable :v-model="sectionInfo.exp_content" item-key="id">
                 <template #item="{element}">
-                    <Experience :id="element.id"
-                    :content="setContent"
-                    @update-experience="(experience: Experience) => {
-                        element.experience_title = experience.experience_title
-                        element.location = experience.location
-                        element.organization = experience.organization
-                        element.tenure = experience.tenure
-                    }"
-                    @update-experience-details="(details: string[]) => {
-                        element.content = details
-                    }" />
+                    <Experience v-model="element" />
                 </template>
-            </draggable>
+            </draggable>-->
 
             <!-- Buttons to add/remove experiences to this section -->
             <div class="experiences-buttons">
-                <button v-if="experiences.length < 42" id="add-experience" @click="addExperience()">Add Experience</button>
-                <button v-if="experiences.length > 1" id="remove-experience" @click="removeExperience()">Remove Experience</button>
+                <button v-if="sectionInfo.exp_content.length < 42" id="add-experience" @click="addExperience()">Add Experience</button>
+                <button v-if="sectionInfo.exp_content.length > 1" id="remove-experience" @click="removeExperienceOrList(false)">Remove Experience</button>
             </div>
         </div>
     </div>

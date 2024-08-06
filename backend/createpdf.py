@@ -12,17 +12,22 @@ import re
 # In the json argument, we expect a json object with the
 # following structure:
 # {
-#     "name": "",
-#     "contact_info": ["", "", ""],
+#     "nameContactInfo": {
+#           "name": "",
+#           "contact_info": [{"id": 1, "info": ""}...]
+#     },
 #     "sections": Section[]
 # }
 class Resume:
     def __init__(self, json):
-        self.name = handleSpecialChars(json["name"])
+        name_contact_info = json["nameContactInfo"]
+
+        self.name = handleSpecialChars(name_contact_info["name"])
 
         contact_info = []
-        for item in json["contact_info"]:
-            contact_info.append(handleSpecialChars(item))
+        for item in name_contact_info["contact_info"]:
+            contact_info_item = item["info"]
+            contact_info.append(handleSpecialChars(contact_info_item))
 
         self.contact_info = contact_info
 
@@ -39,20 +44,15 @@ class Resume:
 # In the json argument, we expect a json object with the
 # following structure:
 # {
-#     "section-name": "",
+#     "section_name": "",
 #     "is_experiences": true,
-#     "content": [
+#     "list_content": [
 #         {
 #             "list-title": "",
 #             "list-content": ""
 #         }
-#     ]
-# }
-# or the following structure
-# {
-#     "section-name": "",
-#     "is_experiences": true,
-#     "content": [
+#     ],
+#     "exp_content": [
 #         {
 #             "experience-title": "",
 #             "location": "",
@@ -70,10 +70,10 @@ class Section:
         # Get the experience or list content associated with this section
         self.content = []
         if self.is_experiences:
-            for experience in json["content"]:
+            for experience in json["exp_content"]:
                 self.content.append(Experience(experience))
         else:
-            for list in json["content"]:
+            for list in json["list_content"]:
                 self.content.append(List(list))
 
 # We create a List object that has a list
