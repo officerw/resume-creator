@@ -58,8 +58,8 @@
     <div class="experience-container">
         <!-- img to indicate that experiences are draggable -->
         <div class="experience-move-ui">
-            <button v-if="experienceInfo.id > 1" id="move-section-up" @click="moveExpUp(experienceInfo.id)"><img src="/static/uparrow-blk.png" alt="Move Section Up"></button>
-            <button v-if="experienceInfo.id < numExperiences" id="move-section-down" @click="moveExpDown(experienceInfo.id)"><img src="/static/downarrow-blk.png" alt="Move Section Down"></button>
+            <button v-if="experienceInfo.id > 1" id="move-exp-up" @click="moveExpUp(experienceInfo.id)"><img src="/static/uparrow.png" alt="Move Experience Up"></button>
+            <button v-if="experienceInfo.id < numExperiences" id="move-exp-down" @click="moveExpDown(experienceInfo.id)"><img src="/static/downarrow.png" alt="Move Experience Down"></button>
         </div>
 
         <div class="experience-info">
@@ -93,7 +93,7 @@
         display: flex;
         width: 100%;
         justify-content: center;
-        padding: 0 2rem;
+        padding: 0 20%;
     }
 
     .expereince-details {

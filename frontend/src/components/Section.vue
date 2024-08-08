@@ -113,8 +113,8 @@
         <!-- Allow users to delete this selection and give some UI indication that the section is draggable -->
         <div id="section-header">
             <div id="section-move-ui">
-                <button v-if="sectionInfo.id > 1" id="move-section-up" @click="moveSectionUp(sectionInfo.id)"><img src="/static/uparrow.png" alt="Move Section Up"></button>
-                <button v-if="sectionInfo.id < numSections" id="move-section-down" @click="moveSectionDown(sectionInfo.id)"><img src="/static/downarrow.png" alt="Move Section Down"></button>
+                <button v-if="sectionInfo.id > 1" id="move-section-up" @click="moveSectionUp(sectionInfo.id)"><img src="/static/uparrow-blk.png" alt="Move Section Up"></button>
+                <button v-if="sectionInfo.id < numSections" id="move-section-down" @click="moveSectionDown(sectionInfo.id)"><img src="/static/downarrow-blk.png" alt="Move Section Down"></button>
             </div>
             
             <button id="delete-section" @click="deleteSection(sectionInfo.id)"><img src="/static/close.png" alt="close"></button>
@@ -165,10 +165,12 @@
 
     #move-section-up {
         margin: 0 5px;
+        background-color: lightblue;
     }
 
     #move-section-down {
         margin: 0 5px;
+        background-color: lightblue;
     }
 
     .resume-section-instance {
