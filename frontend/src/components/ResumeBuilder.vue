@@ -110,7 +110,6 @@
 
     // Upload resume info as JSON so users can update info
     async function readJSON(usingSampleResume: boolean) {
-        debugger
         var upload = (<HTMLInputElement>document.getElementById("json-upload"))
 
         // Functionality after reading file
@@ -131,9 +130,7 @@
             console.log(SampleResume)
         } else if (upload != null && upload.files != null && upload.files[0] != undefined && upload.files[0].name.includes(".json")) {
             file = upload.files[0]
-            console.log(file)
             uploadedResumeInfo = reader.readAsText(file)
-            console.log(uploadedResumeInfo)
         }
 
         // Use uploaded resume info to modify internal resume info
