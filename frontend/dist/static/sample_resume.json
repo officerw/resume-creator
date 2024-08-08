@@ -12,7 +12,8 @@
             "id": 1,
             "section_name": "EDUCATION",
             "section_type": "experience",
-            "content": [
+            "list_content": [],
+            "exp_content": [
                 {
                     "id": 1,
                     "experience_title": "Grinnell College",
@@ -29,26 +30,31 @@
             "id": 2,
             "section_name": "SKILLS",
             "section_type": "list",
-            "content": [
+            "list_content": [
                 {
+                    "id": 1,
                     "list_title": "Programming Languages",
                     "list_content": "Java, Javascript, Python, C/C++, Bash, MIPS Assembly, Racket, HTML, CSS, R, Vue JS "
                 },
                 {
+                    "id": 2,
                     "list_title": "Tools & Technologies",
                     "list_content": "Kubernetes, Docker, Jenkins, Built and managed custom Windows desktop computers, Microsoft Office, Excel, Basic Electronics, Arduino, RStudio, Visual Studio, Git, GitHub"
                 },
                 {
+                    "id": 3,
                     "list_title": "Operating Systems",
                     "list_content": "Windows, Linux"
                 }
-            ]
+            ],
+            "exp_content": []
         },
         {
             "id": 3,
             "section_name": "PROFESSIONAL EXPERIENCE",
             "section_type": "experience",
-            "content": [
+            "list_content": [],
+            "exp_content": [
                 {
                     "id": 1,
                     "experience_title": "Statistics Grader",
@@ -80,7 +86,8 @@
             "id": 4,
             "section_name": "PROJECTS",
             "section_type": "experience",
-            "content": [
+            "list_content": [],
+            "exp_content": [
                 {
                     "id": 1,
                     "experience_title": "Elected Representative Rap Sheet",

@@ -10,7 +10,15 @@
         content: string[]
     }
 
-    const experienceInfo = defineModel<Experience>({
+    const emit = defineEmits(["moveExpUp", "moveExpDown"])
+
+    // The total number of experiences for the section the experience is contained in
+    const numExperiences = defineModel("numExperiences", {
+        type: Number,
+        required: true
+    })
+
+    const experienceInfo = defineModel<Experience>("experienceInfo", {
         default: {
             id: 1,
             experience_title: "",
@@ -32,20 +40,26 @@
         experienceInfo.value.content.pop()
     }
 
-    //const experienceDetailEntries = document.getElementsByClassName("experience-detail-textarea")
-    //            for (let i = 0; i < experienceDetailEntries.length; i++) {
-    //                var currExperienceDetailEntry = experienceDetailEntries[i]
-    //                var scrollHeight = currExperienceDetailEntry.scrollHeight
-    //                currExperienceDetailEntry.setAttribute("style", "height:" + scrollHeight + "px")
-    //            }
+    // Move this experience upwards in the list of experiences
+    // for the section it is in
+    function moveExpUp(idToMove: number) {
+        emit("moveExpUp", idToMove)
+    }
+
+    // Move this experience downwards in the list of experiences
+    // for the section it is in
+    function moveExpDown(idToMove: number) {
+        emit("moveExpDown", idToMove)
+    }
 
 </script>
 
 <template>
     <div class="experience-container">
         <!-- img to indicate that experiences are draggable -->
-        <div class="experience-draggable-ui">
-            <img src="/static/drag.png" alt="draggable">
+        <div class="experience-move-ui">
+            <button v-if="experienceInfo.id > 1" id="move-section-up" @click="moveExpUp(experienceInfo.id)"><img src="/static/uparrow-blk.png" alt="Move Section Up"></button>
+            <button v-if="experienceInfo.id < numExperiences" id="move-section-down" @click="moveExpDown(experienceInfo.id)"><img src="/static/downarrow-blk.png" alt="Move Section Down"></button>
         </div>
 
         <div class="experience-info">
@@ -75,14 +89,11 @@
 </template>
 
 <style>
-    .experience-draggable-ui {
+    .experience-move-ui {
         display: flex;
         width: 100%;
         justify-content: center;
-    }
-
-    .experience-draggable-ui img:hover {
-        cursor: grab;
+        padding: 0 2rem;
     }
 
     .expereince-details {

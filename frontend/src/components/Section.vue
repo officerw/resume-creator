@@ -28,9 +28,15 @@
         exp_content: Array<Experience>
     }
 
-    const emit = defineEmits(["deleteSection"])
+    const emit = defineEmits(["deleteSection", "moveSectionUp", "moveSectionDown"])
 
-    const sectionInfo = defineModel<Section>({
+    const numExperiences = ref(1) // Experience sections always have at least one experience
+    const sectionInfo = defineModel<Section>("sectionInfo", {
+        required: true
+    })
+
+    const numSections = defineModel("numSections", {
+        type: Number,
         required: true
     })
 
@@ -40,19 +46,17 @@
     }
 
     function addExperience() {
+        numExperiences.value = numExperiences.value + 1
+
         // Get experience index
-        let index = 1
-        if (sectionInfo.value.exp_content.length != 0)
-            index = sectionInfo.value.exp_content[sectionInfo.value.exp_content.length - 1].id + 1
+        let index = sectionInfo.value.exp_content.length + 1
         
         sectionInfo.value.exp_content.push({id: index, experience_title: "", location: "", organization: "", tenure: "", content: [""]})
     }
 
     function addList() {
         // Get list index
-        let index = 1
-        if (sectionInfo.value.list_content.length != 0)
-            index = sectionInfo.value.list_content[sectionInfo.value.list_content.length - 1].id + 1
+        let index = sectionInfo.value.list_content.length + 1
         
         sectionInfo.value.list_content.push({id: index, list_title: "", list_content: ""})
     }
@@ -61,8 +65,45 @@
         if (removeList) {
             sectionInfo.value.list_content.pop()
         } else {
+            numExperiences.value = numExperiences.value - 1
             sectionInfo.value.exp_content.pop()
         }
+    }
+
+    function moveSectionUp(id: number) {
+        emit("moveSectionUp", id)
+    }
+
+    function moveSectionDown(id: number) {
+        emit("moveSectionDown", id)
+    }
+
+    // Move experience up in list of exp's
+    function moveExpUp(idToMove: number) {
+        var expToMoveUp = sectionInfo.value.exp_content[idToMove - 1]
+        var expToMoveDown = sectionInfo.value.exp_content[idToMove - 2]
+
+        // Set new id's for experiences
+        expToMoveUp.id = expToMoveUp.id - 1
+        expToMoveDown.id = expToMoveDown.id + 1
+
+        // Swap experiences in list
+        sectionInfo.value.exp_content[idToMove - 2] = expToMoveUp
+        sectionInfo.value.exp_content[idToMove - 1] = expToMoveDown
+    }
+
+    // Move experience down in list of exp's
+    function moveExpDown(idToMove: number) {
+        var expToMoveUp = sectionInfo.value.exp_content[idToMove]
+        var expToMoveDown = sectionInfo.value.exp_content[idToMove - 1]
+
+        // Set new id's for experiences
+        expToMoveUp.id = expToMoveUp.id - 1
+        expToMoveDown.id = expToMoveDown.id + 1
+
+        // Swap experiences in list
+        sectionInfo.value.exp_content[idToMove - 1] = expToMoveUp
+        sectionInfo.value.exp_content[idToMove] = expToMoveDown
     }
 
 </script>
@@ -71,7 +112,11 @@
     <div class="resume-section-instance">
         <!-- Allow users to delete this selection and give some UI indication that the section is draggable -->
         <div id="section-header">
-            <img id="draggable-ui" src="/static/drag.png" alt="draggable">
+            <div id="section-move-ui">
+                <button v-if="sectionInfo.id > 1" id="move-section-up" @click="moveSectionUp(sectionInfo.id)"><img src="/static/uparrow.png" alt="Move Section Up"></button>
+                <button v-if="sectionInfo.id < numSections" id="move-section-down" @click="moveSectionDown(sectionInfo.id)"><img src="/static/downarrow.png" alt="Move Section Down"></button>
+            </div>
+            
             <button id="delete-section" @click="deleteSection(sectionInfo.id)"><img src="/static/close.png" alt="close"></button>
         </div>
         
@@ -95,13 +140,11 @@
         </div> <!-- Here, we outline the layout of a list of experiences type section and update experience details based on user input -->
         <div v-else class="experience-section">
             <div v-for="(experience, i) in sectionInfo.exp_content">
-                <Experience v-model="sectionInfo.exp_content[i]" ></Experience>
+                <Experience v-model:experience-info="sectionInfo.exp_content[i]" 
+                v-model:num-experiences="numExperiences"
+                @move-exp-up="(idToMove) => moveExpUp(idToMove)"
+                @move-exp-down="(idToMove) => moveExpDown(idToMove)"></Experience>
             </div>
-            <!--<draggable :v-model="sectionInfo.exp_content" item-key="id">
-                <template #item="{element}">
-                    <Experience v-model="element" />
-                </template>
-            </draggable>-->
 
             <!-- Buttons to add/remove experiences to this section -->
             <div class="experiences-buttons">
@@ -113,6 +156,21 @@
 </template>
 
 <style>
+    #section-move-ui {
+        display: inline-flex;
+        width: 60%;
+        margin: 5px;
+        margin-left: 20%;
+    }
+
+    #move-section-up {
+        margin: 0 5px;
+    }
+
+    #move-section-down {
+        margin: 0 5px;
+    }
+
     .resume-section-instance {
         background-color: white;
         border-radius: 7px;

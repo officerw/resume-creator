@@ -27,12 +27,17 @@
         exp_content: Array<Experience>
     }
 
+    // Total number of sections in the resume
+    const numSections = ref(0)
+
     const sections = defineModel<Array<Section>>({
         required: true
     })
 
     // Add a section based on the type
     function addSection(sectionType: string) {
+        numSections.value = numSections.value + 1
+
         // Get index of section
         let index = 1
         // If there is at least one section, get the maximum index value
@@ -56,6 +61,8 @@
 
     // Remove a section when the user deletes it
     function removeSection(idToRemove: Number) {
+        numSections.value = numSections.value - 1
+
         let updatedSections: (Section)[] = []
         for (let i = 0; i < sections.value.length; i++) {
             let currentSection = sections.value[i]
@@ -67,6 +74,38 @@
         sections.value = updatedSections
     }
 
+    // Move a section upwards
+    function moveSectionUp(idToMove: number) {
+        // Checks on section existence are made in Section.vue with the visibility
+        // of section move buttons
+        var sectionToMoveUp = sections.value[idToMove - 1]
+        var sectionToMoveDown = sections.value[idToMove - 2]
+
+        // Set new section id's
+        sectionToMoveUp.id = sectionToMoveUp.id - 1
+        sectionToMoveDown.id = sectionToMoveDown.id + 1
+
+        // Swap sections in list of sections
+        sections.value[idToMove - 2] = sectionToMoveUp
+        sections.value[idToMove - 1] = sectionToMoveDown
+    }
+
+    // Move a section downwards
+    function moveSectionDown(idToMove: number) {
+        // Checks on section existence are made in Section.vue with the visibility
+        // of section move buttons
+        var sectionToMoveDown = sections.value[idToMove - 1]
+        var sectionToMoveUp = sections.value[idToMove]
+
+        // Set new section id's
+        sectionToMoveUp.id = sectionToMoveUp.id - 1
+        sectionToMoveDown.id = sectionToMoveDown.id + 1
+
+        // Swap sections in list of sections
+        sections.value[idToMove - 1] = sectionToMoveUp
+        sections.value[idToMove] = sectionToMoveDown
+    }
+
 </script>
 
 <template>
@@ -76,15 +115,12 @@
         <!-- List of sections -->
         <div v-if="sections.length > 0" class="sections-list">
             <div v-for="(section, i) in sections">
-                <Section v-model="sections[i]" 
-                @delete-section="(idToRemove) => removeSection(idToRemove)" ></Section>
+                <Section v-model:section-info="sections[i]" 
+                v-model:num-sections="numSections"
+                @delete-section="(idToRemove) => removeSection(idToRemove)"
+                @move-section-up="(idToMove) => moveSectionUp(idToMove)"
+                @move-section-down="(idToMove) => moveSectionDown(idToMove)"</Section>
             </div>
-            <!--<draggable v-model="sections" item-key="id">
-                <template #item="{element}">
-                    <Section v-model="element"
-                        @delete-section="(idToRemove) => removeSection(idToRemove)"></Section>
-                </template>
-            </draggable>-->
         </div>
 
         <!-- The following section allows the user to add different kinds of sections to the resume builder -->
