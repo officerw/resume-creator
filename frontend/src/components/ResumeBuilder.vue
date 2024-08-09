@@ -12,6 +12,11 @@
     import SampleResume from "../../public/static/sample_resume.json"
     import { onMounted, ref, watch } from "vue"
     
+    // The number of milliseconds to wait before making an API call
+    // Used to slow the request rate
+    var waitTime = 500
+    var numAPICalls = 0
+
     const API_ENDPOINT = "/api/compilepdf"
     //const API_ENDPOINT = "https://resume-creator-cffw6ike3q-uc.a.run.app/api/compilepdf"
 
@@ -75,8 +80,18 @@
 
     // Compile the resume information into a PDF
     async function compilePDF() {
-        console.log("Test")
-        console.log(JSON.stringify({ template: props.template, resume_info: resumeInfo.value}))
+        numAPICalls = numAPICalls + 1
+        // Artificially slow the request rate to prevent too many API requests
+        await new Promise(f => setTimeout(f, waitTime))
+        // If the user is generating many resumes, increase the wait time
+        if (numAPICalls == 30) {
+            waitTime = 1000
+        } else if (numAPICalls == 50) {
+            waitTime = 2500
+        } else if (numAPICalls == 100) {
+            waitTime = 4500
+        }
+
         // POST request to backend with resume info as JSON
         const response = await fetch(API_ENDPOINT, {
             method: "POST",
@@ -127,7 +142,6 @@
         var uploadedResumeInfo
         if (usingSampleResume) {
             uploadedResumeInfo = JSON.parse(JSON.stringify(SampleResume))
-            console.log(SampleResume)
         } else if (upload != null && upload.files != null && upload.files[0] != undefined && upload.files[0].name.includes(".json")) {
             file = upload.files[0]
             uploadedResumeInfo = reader.readAsText(file)
@@ -142,7 +156,6 @@
 
     // Use uploaded resume info to modify internal resume info
     function setResumeBasedOnJSON(uploadedResumeInfo: ResumeInfo) {
-        console.log(uploadedResumeInfo)
 
         // Set name based on uploaded info
         resumeInfo.value.nameContactInfo.name = uploadedResumeInfo.nameContactInfo.name
@@ -171,8 +184,6 @@
                 list_content: uploadedSections[i].list_content,
                 exp_content: uploadedSections[i].exp_content
             })
-
-            console.log(sections)
         }
     }
 
