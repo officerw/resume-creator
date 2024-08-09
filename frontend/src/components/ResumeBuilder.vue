@@ -19,8 +19,8 @@
 
     const numSections = ref(0)
 
-    const API_ENDPOINT = "/api/compilepdf"
-    //const API_ENDPOINT = "https://resume-creator-cffw6ike3q-uc.a.run.app/api/compilepdf"
+    //const API_ENDPOINT = "/api/compilepdf"
+    const API_ENDPOINT = "https://resume-creator-cffw6ike3q-uc.a.run.app/api/compilepdf"
 
     type NameContactInfo = {
         name: string
