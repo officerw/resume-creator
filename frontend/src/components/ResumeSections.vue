@@ -28,9 +28,12 @@
     }
 
     // Total number of sections in the resume
-    const numSections = ref(0)
+    const numSections = defineModel("numSections", {
+        type: Number,
+        required: true
+    })
 
-    const sections = defineModel<Array<Section>>({
+    const sections = defineModel<Array<Section>>("sections", {
         required: true
     })
 
@@ -119,7 +122,7 @@
                 v-model:num-sections="numSections"
                 @delete-section="(idToRemove) => removeSection(idToRemove)"
                 @move-section-up="(idToMove) => moveSectionUp(idToMove)"
-                @move-section-down="(idToMove) => moveSectionDown(idToMove)"</Section>
+                @move-section-down="(idToMove) => moveSectionDown(idToMove)"></Section>
             </div>
         </div>
 

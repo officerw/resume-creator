@@ -17,6 +17,8 @@
     var waitTime = 500
     var numAPICalls = 0
 
+    const numSections = ref(0)
+
     const API_ENDPOINT = "/api/compilepdf"
     //const API_ENDPOINT = "https://resume-creator-cffw6ike3q-uc.a.run.app/api/compilepdf"
 
@@ -126,37 +128,28 @@
     // Upload resume info as JSON so users can update info
     async function readJSON(usingSampleResume: boolean) {
         var upload = (<HTMLInputElement>document.getElementById("json-upload"))
+        var uploadedResumeInfo
 
-        // Functionality after reading file
+        // Functionality after reading file, set resume based on info
         var reader = new FileReader()
-        reader.onload = () => {
-            // If the information read is a string, parse as JSON
-            var result = reader.result?.toString()
-            if (result != undefined) {
-                return JSON.parse(result)
-            }
-        }
-        
+        reader.addEventListener("load", () => {
+            if (typeof reader.result === "string")
+                setResumeBasedOnJSON(JSON.parse(reader.result))
+        })
+
         // Verify user uploaded .json file or is using sample resume
         var file = null
-        var uploadedResumeInfo
         if (usingSampleResume) {
             uploadedResumeInfo = JSON.parse(JSON.stringify(SampleResume))
+            setResumeBasedOnJSON(uploadedResumeInfo)
         } else if (upload != null && upload.files != null && upload.files[0] != undefined && upload.files[0].name.includes(".json")) {
             file = upload.files[0]
-            uploadedResumeInfo = reader.readAsText(file)
+            reader.readAsText(file)
         }
-
-        // Use uploaded resume info to modify internal resume info
-        if (uploadedResumeInfo) {
-            setResumeBasedOnJSON(uploadedResumeInfo)
-        }
-            
     }
 
     // Use uploaded resume info to modify internal resume info
     function setResumeBasedOnJSON(uploadedResumeInfo: ResumeInfo) {
-
         // Set name based on uploaded info
         resumeInfo.value.nameContactInfo.name = uploadedResumeInfo.nameContactInfo.name
 
@@ -176,6 +169,7 @@
         var uploadedSections = uploadedResumeInfo.sections
         while (sections.length > 0)
             sections.pop()
+            numSections.value = 0
 
         // Set new sections
         for (let i = 0; i < uploadedSections.length; i++) {
@@ -185,6 +179,8 @@
                 exp_content: uploadedSections[i].exp_content
             })
         }
+
+        numSections.value = sections.length
     }
 
     // On mount, link import button to file input
@@ -236,7 +232,8 @@
     <div class="resume-builder">
         <NameContactInfo v-model="resumeInfo.nameContactInfo"/>
 
-        <ResumeSections v-model="resumeInfo.sections"/>
+        <ResumeSections v-model:sections="resumeInfo.sections"
+        v-model:num-sections="numSections"/>
     </div>
     
 </template>
